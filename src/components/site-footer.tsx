@@ -1,36 +1,59 @@
+import { Phone, Share2 } from "lucide-react";
+import { VisitCounter } from "@/components/visit-counter";
 import { contact, office, sources } from "@/lib/content";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-gold/30 bg-[#0a0a0a] text-[#f7f1e4]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-end md:justify-between">
+    <footer className="border-t-4 border-gold bg-[#0a0a0a] text-[#f7f1e4]">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.2fr_0.8fr] md:py-16">
         <div>
-          <p className="text-xs tracking-wide text-gold">{office.mediaOffice}</p>
-          <p className="mt-2 font-heading text-xl font-semibold">{office.brand}</p>
-          <p className="mt-2 max-w-md text-sm leading-7 text-white/70">
-            {office.district} · {office.bloc} · انتخابات {office.electionYear}
+          <p className="text-sm tracking-wide text-gold">{office.mediaOffice}</p>
+          <p className="mt-3 font-heading text-3xl font-bold leading-snug sm:text-4xl">
+            {office.brand}
           </p>
-          <p className="mt-3 text-sm text-white/80">
-            <a href={`tel:${contact.phoneTel}`} className="hover:text-gold" dir="ltr">
-              {contact.phoneDisplay}
-            </a>
-            <span className="mx-2 text-white/40">·</span>
-            {contact.hours}
+          <p className="mt-4 max-w-xl text-base leading-8 text-white/75">
+            خدمة أهلنا في العراق الحبيب · {office.district} · انتخابات {office.electionYear}
           </p>
-        </div>
-        <div className="text-xs leading-6 text-white/60 md:text-end">
-          <p className="mb-1 font-medium text-white/85">مصادر عامة مستخدمة في المحتوى</p>
-          {sources.map((source) => (
+
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             <a
-              key={source.href}
-              href={source.href}
+              href={`tel:${contact.phoneTel}`}
+              className="inline-flex items-center gap-3 rounded-xl border border-white/20 px-5 py-4 text-lg font-semibold transition-colors hover:border-gold hover:text-gold"
+              dir="ltr"
+            >
+              <Phone className="size-5" aria-hidden />
+              <span className="unicode-isolate tabular-nums tracking-wide">{contact.phoneDisplay}</span>
+            </a>
+            <a
+              href={contact.facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="block underline-offset-4 hover:text-gold hover:underline"
+              className="inline-flex items-center gap-3 rounded-xl border border-white/20 px-5 py-4 text-lg font-semibold transition-colors hover:border-gold hover:text-gold"
             >
-              {source.label}
+              <Share2 className="size-5" aria-hidden />
+              {contact.facebookLabel}
             </a>
-          ))}
+          </div>
+
+          <p className="mt-5 text-base text-white/80">{contact.hours}</p>
+        </div>
+
+        <div className="flex flex-col items-start gap-8 md:items-end">
+          <VisitCounter />
+          <div className="text-sm leading-7 text-white/60 md:text-end">
+            <p className="mb-2 text-base font-medium text-white/90">مصادر عامة مستخدمة في المحتوى</p>
+            {sources.map((source) => (
+              <a
+                key={source.href}
+                href={source.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block underline-offset-4 hover:text-gold hover:underline"
+              >
+                {source.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

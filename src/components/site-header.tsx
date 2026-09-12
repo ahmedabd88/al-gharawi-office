@@ -11,20 +11,17 @@ export function SiteHeader() {
 
   return (
     <header className="absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6">
-        <a
-          href="#top"
-          className="font-heading text-lg font-semibold tracking-tight text-white sm:text-xl"
-        >
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <a href="#top" className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg">
           {office.shortBrand}
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="القائمة الرئيسية">
+        <nav className="hidden items-center gap-6 md:flex" aria-label="القائمة الرئيسية">
           {nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-white/85 transition-colors hover:text-gold"
+              className="text-sm font-medium text-white/90 drop-shadow transition-colors hover:text-gold"
             >
               {item.label}
             </a>
@@ -42,7 +39,7 @@ export function SiteHeader() {
           type="button"
           variant="outline"
           size="icon"
-          className="border-white/40 bg-black/20 text-white hover:bg-white/10 hover:text-white md:hidden"
+          className="border-white/40 bg-black/35 text-white hover:bg-white/10 hover:text-white md:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
@@ -55,7 +52,7 @@ export function SiteHeader() {
       <div
         id="mobile-nav"
         className={cn(
-          "mx-4 overflow-hidden rounded-xl border border-white/15 bg-black/90 shadow-sm backdrop-blur md:hidden",
+          "mx-4 overflow-hidden rounded-xl border border-white/15 bg-black/95 shadow-sm backdrop-blur md:hidden",
           open ? "mb-3 max-h-64 opacity-100" : "pointer-events-none max-h-0 border-0 opacity-0"
         )}
       >

@@ -61,23 +61,20 @@
   --card-foreground: #1a2b24;
   --popover: #ffffff;
   --popover-foreground: #1a2b24;
-  --primary: #0f5c45;
-  --primary-foreground: #f5fbf8;
-  --secondary: #e6efe9;
-  --secondary-foreground: #1a2b24;
-  --muted: #e8eeea;
-  --muted-foreground: #4d6359;
-  --accent: #d9ebe2;
-  --accent-foreground: #0f5c45;
-  --destructive: oklch(0.55 0.2 25);
-  --border: #c9d7cf;
-  --input: #c9d7cf;
-  --ring: #0f5c45;
-  --brand: #111111;
-  --brand-foreground: #f7f1e4;
   --primary: #1a1a1a;
   --primary-foreground: #f7f1e4;
+  --secondary: #eee8da;
+  --secondary-foreground: #1a1205;
+  --muted: #efe9dc;
+  --muted-foreground: #5c5346;
+  --accent: #f3ead2;
+  --accent-foreground: #1a1205;
+  --destructive: oklch(0.55 0.2 25);
+  --border: #d9d0bc;
+  --input: #d9d0bc;
   --ring: #c9a227;
+  --brand: #111111;
+  --brand-foreground: #f7f1e4;
   --gold: #c9a227;
   --sky: #6a93a8;
   --stone-warm: #8a7a64;
@@ -203,6 +200,10 @@
   background: linear-gradient(90deg, var(--gold), #3a3a3a);
 }
 
+.unicode-isolate {
+  unicode-bidi: isolate;
+}
+
 .hero-gold-sheen {
   background:
     radial-gradient(ellipse 50% 40% at 70% 30%, rgba(201, 162, 39, 0.18), transparent 60%),
@@ -216,7 +217,8 @@
   .animate-rise-delay-1,
   .animate-rise-delay-2,
   .animate-rise-delay-3,
-  .orb-pulse {
+  .orb-pulse,
+  .hero-gold-sheen {
     animation: none !important;
   }
 }
