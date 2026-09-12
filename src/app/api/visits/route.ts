@@ -4,6 +4,11 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
+/**
+ * Visit counter storage.
+ * On local/dev: persists to data/visits.json
+ * On Vercel: filesystem is ephemeral — counter may reset between deploys/instances.
+ */
 const dataDir = path.join(process.cwd(), "data");
 const visitsFile = path.join(dataDir, "visits.json");
 
@@ -22,8 +27,12 @@ async function readVisits(): Promise<VisitsData> {
 }
 
 async function writeVisits(data: VisitsData) {
-  await mkdir(dataDir, { recursive: true });
-  await writeFile(visitsFile, JSON.stringify(data, null, 2), "utf8");
+  try {
+    await mkdir(dataDir, { recursive: true });
+    await writeFile(visitsFile, JSON.stringify(data, null, 2), "utf8");
+  } catch {
+    // Ignore write failures on read-only serverless filesystems (e.g. Vercel).
+  }
 }
 
 export async function GET(request: Request) {
