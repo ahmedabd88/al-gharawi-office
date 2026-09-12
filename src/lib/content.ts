@@ -1,22 +1,25 @@
 /**
  * Site content for مكتب النائب سالم سوادي الغراوي.
  *
- * Verified public facts are marked clearly. Contact details and personal
- * biography beyond election records are NOT invented — placeholders await
- * office confirmation.
+ * Public election/committee facts + office-provided contact/branding.
+ * Remaining unknowns stay marked as awaiting confirmation.
  */
 
 export const office = {
   brand: "مكتب النائب سالم سوادي الغراوي",
   shortBrand: "مكتب النائب",
+  mediaOffice: "المكتب الإعلامي",
   representative: "سالم سوادي الغراوي",
   fullName: "سالم سوادي خصاف حسين الغراوي",
   role: "نائب في مجلس النواب العراقي",
+  bloc: "الكتلة الصدرية",
   district: "بغداد الكرخ — الدائرة الانتخابية 17",
   electionYear: "2021",
   electionListNote: "ورد اسمه ضمن قائمة الكتلة الصدرية في نتائج انتخابات 2021",
   committeeNote:
     "ورد اسمه ضمن أعضاء اللجنة القانونية النيابية في بيان رسمي بتاريخ 30 آذار 2022",
+  bannerSrc: "/images/banner-official.jpg",
+  bannerAlt: "بانر المكتب الإعلامي للنائب سالم سوادي الغراوي",
 } as const;
 
 export const hero = {
@@ -35,7 +38,7 @@ export const about = {
     office.electionListNote + ".",
     office.committeeNote + ".",
   ],
-  note: "تفاصيل السيرة الشخصية الإضافية (الدراسة، المناصب السابقة، الصورة الرسمية) بانتظار تزويد المكتب بها.",
+  note: "تفاصيل السيرة الشخصية الإضافية (الدراسة والمناصب السابقة) بانتظار تزويد المكتب بها.",
 } as const;
 
 export const services = {
@@ -60,19 +63,21 @@ export const services = {
     {
       title: "الاستفسارات العامة",
       description:
-        "توضيح آليات تقديم الطلبات ومواعيد الاستقبال بعد اعتماد بيانات التواصل النهائية.",
+        "توضيح آليات تقديم الطلبات ومواعيد الاستقبال عبر قنوات المكتب المعتمدة.",
     },
   ],
 } as const;
 
 export const contact = {
   title: "تواصل معنا",
-  lead: "أرسل رسالتك عبر النموذج أدناه. بيانات الهاتف والعنوان بانتظار تأكيد المكتب.",
+  lead: "تواصل هاتفياً أو أرسل رسالتك عبر النموذج. العنوان والبريد بانتظار تأكيد إضافي من المكتب.",
+  phoneDisplay: "0776 208 4894",
+  phoneTel: "+9647762084894",
+  phoneRaw: "07762084894",
+  hours: "كل يوم جمعة الساعة 8 مساءً",
   placeholders: {
-    phone: "رقم الهاتف — يُحدَّث لاحقاً",
     email: "البريد الإلكتروني — يُحدَّث لاحقاً",
     address: "عنوان المكتب — يُحدَّث لاحقاً",
-    hours: "أوقات الاستقبال — تُحدَّث لاحقاً",
   },
   form: {
     name: "الاسم الكامل",
@@ -80,7 +85,7 @@ export const contact = {
     subject: "موضوع الطلب",
     message: "تفاصيل الرسالة",
     submit: "إرسال الرسالة",
-    success: "تم استلام رسالتك محلياً. سيتم ربط الإرسال بقنوات المكتب بعد اعتماد بيانات التواصل.",
+    success: "تم استلام رسالتك محلياً. يمكنك أيضاً الاتصال مباشرة على رقم المكتب.",
     required: "يرجى تعبئة الحقول المطلوبة.",
   },
 } as const;

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { hero, office } from "@/lib/content";
 
@@ -5,32 +6,45 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="hero-atmosphere relative isolate min-h-[100svh] overflow-hidden"
+      className="relative isolate min-h-[100svh] overflow-hidden bg-[#0a0a0a]"
       aria-labelledby="hero-brand"
     >
-      <div
-        className="orb-pulse pointer-events-none absolute -start-24 top-24 size-72 rounded-full bg-sky/25 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="orb-pulse pointer-events-none absolute -end-16 bottom-28 size-80 rounded-full bg-primary/20 blur-3xl"
-        aria-hidden
-        style={{ animationDelay: "1.5s" }}
+      <Image
+        src={office.bannerSrc}
+        alt={office.bannerAlt}
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-[center_20%] sm:object-center"
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-4 pb-20 pt-28 sm:px-6">
+      <div
+        className="absolute inset-0 bg-gradient-to-l from-black/85 via-black/72 to-black/45"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/35"
+        aria-hidden
+      />
+      <div className="hero-gold-sheen pointer-events-none absolute inset-0" aria-hidden />
+
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:justify-center sm:px-6 sm:pb-20">
+        <p className="animate-rise text-sm font-medium tracking-wide text-gold/90 sm:text-base">
+          {office.mediaOffice}
+        </p>
+
         <p
           id="hero-brand"
-          className="animate-rise font-heading text-4xl font-bold leading-tight text-brand sm:text-5xl md:text-6xl lg:text-7xl"
+          className="animate-rise-delay-1 mt-3 max-w-3xl font-heading text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
           {office.brand}
         </p>
 
-        <h1 className="animate-rise-delay-1 mt-6 max-w-2xl font-heading text-2xl font-semibold text-foreground sm:text-3xl md:text-4xl">
+        <h1 className="animate-rise-delay-2 mt-5 max-w-2xl font-heading text-2xl font-semibold text-gold sm:text-3xl md:text-4xl">
           {hero.headline}
         </h1>
 
-        <p className="animate-rise-delay-2 mt-4 max-w-xl text-base leading-8 text-muted-foreground sm:text-lg">
+        <p className="animate-rise-delay-3 mt-4 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
           {hero.support}
         </p>
 
@@ -38,7 +52,7 @@ export function Hero() {
           <Button
             render={<a href="#contact" />}
             size="lg"
-            className="h-11 rounded-md px-6 text-base"
+            className="h-11 rounded-md bg-gold px-6 text-base text-[#1a1205] hover:bg-gold/90"
           >
             {hero.primaryCta}
           </Button>
@@ -46,7 +60,7 @@ export function Hero() {
             render={<a href="#services" />}
             variant="outline"
             size="lg"
-            className="h-11 rounded-md border-brand/30 bg-background/50 px-6 text-base backdrop-blur hover:bg-background/80"
+            className="h-11 rounded-md border-white/35 bg-white/5 px-6 text-base text-white backdrop-blur hover:bg-white/15 hover:text-white"
           >
             {hero.secondaryCta}
           </Button>

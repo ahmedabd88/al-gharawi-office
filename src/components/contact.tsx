@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,19 +40,26 @@ export function Contact() {
           <div className="space-y-5 text-sm leading-7">
             <div className="border-b border-border/70 pb-4">
               <p className="font-medium text-foreground">الهاتف</p>
-              <p className="mt-1 text-muted-foreground">{contact.placeholders.phone}</p>
+              <a
+                href={`tel:${contact.phoneTel}`}
+                className="mt-2 inline-flex items-center gap-2 text-lg font-semibold text-brand transition-colors hover:text-gold"
+                dir="ltr"
+              >
+                <Phone className="size-4" aria-hidden />
+                {contact.phoneDisplay}
+              </a>
+            </div>
+            <div className="border-b border-border/70 pb-4">
+              <p className="font-medium text-foreground">أوقات الاستقبال</p>
+              <p className="mt-1 text-base text-foreground/90">{contact.hours}</p>
             </div>
             <div className="border-b border-border/70 pb-4">
               <p className="font-medium text-foreground">البريد</p>
               <p className="mt-1 text-muted-foreground">{contact.placeholders.email}</p>
             </div>
-            <div className="border-b border-border/70 pb-4">
+            <div>
               <p className="font-medium text-foreground">العنوان</p>
               <p className="mt-1 text-muted-foreground">{contact.placeholders.address}</p>
-            </div>
-            <div>
-              <p className="font-medium text-foreground">أوقات الاستقبال</p>
-              <p className="mt-1 text-muted-foreground">{contact.placeholders.hours}</p>
             </div>
           </div>
 

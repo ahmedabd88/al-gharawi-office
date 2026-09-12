@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { about, office } from "@/lib/content";
 
 export function About() {
@@ -10,7 +11,7 @@ export function About() {
           <p className="mt-3 text-lg text-muted-foreground">{about.lead}</p>
         </div>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div className="space-y-5 text-base leading-8 text-foreground/90 sm:text-lg">
             {about.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
@@ -20,23 +21,35 @@ export function About() {
             </p>
           </div>
 
-          <aside className="border-s-4 border-primary/70 bg-secondary/60 px-5 py-6 sm:px-6">
-            <p className="font-heading text-xl font-semibold text-brand">{office.representative}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{office.role}</p>
-            <dl className="mt-6 space-y-4 text-sm">
-              <div>
-                <dt className="font-medium text-foreground">الدائرة</dt>
-                <dd className="mt-1 text-muted-foreground">{office.district}</dd>
-              </div>
-              <div>
-                <dt className="font-medium text-foreground">الانتخابات</dt>
-                <dd className="mt-1 text-muted-foreground">مجلس النواب {office.electionYear}</dd>
-              </div>
-              <div>
-                <dt className="font-medium text-foreground">الاسم الكامل</dt>
-                <dd className="mt-1 text-muted-foreground">{office.fullName}</dd>
-              </div>
-            </dl>
+          <aside className="overflow-hidden border border-border/70 bg-[#0f0f0f] text-white shadow-sm">
+            <div className="relative aspect-[1080/556] w-full">
+              <Image
+                src={office.bannerSrc}
+                alt={office.bannerAlt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 360px"
+                className="object-cover object-top"
+              />
+            </div>
+            <div className="border-t border-gold/30 px-5 py-5 sm:px-6">
+              <p className="text-xs tracking-wide text-gold">{office.mediaOffice}</p>
+              <p className="mt-2 font-heading text-xl font-semibold">{office.representative}</p>
+              <p className="mt-1 text-sm text-white/70">{office.role}</p>
+              <dl className="mt-5 space-y-3 text-sm">
+                <div>
+                  <dt className="font-medium text-gold/90">الدائرة</dt>
+                  <dd className="mt-1 text-white/75">{office.district}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gold/90">الكتلة</dt>
+                  <dd className="mt-1 text-white/75">{office.bloc}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gold/90">الانتخابات</dt>
+                  <dd className="mt-1 text-white/75">مجلس النواب {office.electionYear}</dd>
+                </div>
+              </dl>
+            </div>
           </aside>
         </div>
       </div>
