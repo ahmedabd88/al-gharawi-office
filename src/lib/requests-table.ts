@@ -1,4 +1,4 @@
-/** Official office «جدول طلبات» model + sample rows + localStorage bridge. */
+/** Official office «جدول طلبات» model + sample rows. */
 
 export const REQUESTS_STORAGE_KEY = "citizen-requests";
 
@@ -11,8 +11,6 @@ export type CitizenRequestRecord = {
 
 export type OfficialRequestRow = {
   id: string;
-  /** رقم وتاريخ الكتاب */
-  letterRef: string;
   /** الموضوع */
   subject: string;
   /** محتوى الموضوع */
@@ -32,12 +30,11 @@ export const requestsTableCopy = {
   officeLine: "مكتب النائب سالم سوادي الغراوي",
   dateLabel: "التاريخ",
   columns: [
-    { key: "seq", label: "ت", width: "4%" },
-    { key: "letterRef", label: "رقم وتاريخ الكتاب", width: "16%" },
-    { key: "subject", label: "الموضوع", width: "16%" },
-    { key: "content", label: "محتوى الموضوع", width: "28%" },
-    { key: "phone", label: "الهاتف", width: "14%" },
-    { key: "directive", label: "توجيه سيادتكم", width: "22%" },
+    { key: "seq", label: "ت", width: "5%" },
+    { key: "subject", label: "الموضوع", width: "18%" },
+    { key: "content", label: "محتوى الموضوع", width: "35%" },
+    { key: "phone", label: "الهاتف", width: "16%" },
+    { key: "directive", label: "توجيه سيادتكم", width: "26%" },
   ] as const,
   empty: "لا توجد طلبات محفوظة بعد. يمكنك إظهار صفوف تجريبية للطباعة والتدريب.",
   showSamples: "إظهار صفوف تجريبية",
@@ -46,7 +43,7 @@ export const requestsTableCopy = {
   refresh: "تحديث من الطلبات المحفوظة",
   clearCitizen: "مسح الطلبات المحفوظة على هذا الجهاز",
   citizenNote:
-    "الطلبات الواردة من صفحة «قدّم طلباً» تُحفظ على هذا الجهاز فقط (بدون خادم) وتظهر في الجدول أدناه لطباعتها رسمياً.",
+    "الطلبات الواردة من صفحة «قدّم طلباً» تُحفظ على الخادم وتظهر هنا بعد دخول المكتب لطباعتها رسمياً.",
   printHint: "استخدم الطباعة الأفقية (Landscape) للحصول على أفضل مواءمة للأعمدة.",
 } as const;
 
@@ -58,14 +55,9 @@ export function formatOfficeDate(date: Date = new Date()): string {
   return `${d}/${m}/${y}`;
 }
 
-export function formatLetterRef(seq: number, date: Date): string {
-  return `م.ن/${String(seq).padStart(3, "0")} في ${formatOfficeDate(date)}`;
-}
-
 export const sampleOfficialRows: OfficialRequestRow[] = [
   {
     id: "sample-1",
-    letterRef: "م.ن/001 في 10/9/2026",
     subject: "متابعة معاملة خدمية",
     content: "طلب المواطن أحمد محمد علي حسن متابعة معاملة خدمات بلدية في المحمودية.",
     phone: "07701234567",
@@ -75,7 +67,6 @@ export const sampleOfficialRows: OfficialRequestRow[] = [
   },
   {
     id: "sample-2",
-    letterRef: "م.ن/002 في 12/9/2026",
     subject: "استفسار إداري",
     content: "طلب المواطن حسين كاظم جاسم عبيد الاستفسار عن مسار معاملة إدارية لدى الوزارة.",
     phone: "07801234567",
@@ -85,7 +76,6 @@ export const sampleOfficialRows: OfficialRequestRow[] = [
   },
   {
     id: "sample-3",
-    letterRef: "م.ن/003 في 14/9/2026",
     subject: "طلب مساعدة",
     content: "طلب المواطنة فاطمة حسن علي كريم المساعدة في متابعة ملف يتعلق بالأحوال المدنية.",
     phone: "07771234567",
@@ -99,12 +89,9 @@ export function citizenToOfficialRow(
   record: CitizenRequestRecord,
   index: number
 ): OfficialRequestRow {
-  const created = record.at ? new Date(record.at) : new Date();
-  const safeDate = Number.isNaN(created.getTime()) ? new Date() : created;
   const subject = record.subject?.trim() || "طلب مواطن";
   return {
     id: `citizen-${record.at}-${index}`,
-    letterRef: formatLetterRef(index + 1, safeDate),
     subject,
     content: `طلب المواطن ${record.fullName}${
       record.subject?.trim() ? ` بخصوص: ${record.subject.trim()}` : ""

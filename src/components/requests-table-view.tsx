@@ -190,7 +190,6 @@ export function RequestsTableView() {
                       <td className="cell-seq text-right" dir="ltr">
                         {index + 1}
                       </td>
-                      <td className="text-right">{row.letterRef}</td>
                       <td className="text-right">{row.subject}</td>
                       <td className="cell-content text-right">{row.content}</td>
                       <td className="cell-phone text-right" dir="ltr">
@@ -206,7 +205,6 @@ export function RequestsTableView() {
                         <td className="cell-seq text-right" dir="ltr">
                           {rows.length + i + 1}
                         </td>
-                        <td className="text-right">&nbsp;</td>
                         <td className="text-right">&nbsp;</td>
                         <td className="text-right">&nbsp;</td>
                         <td className="text-right">&nbsp;</td>
