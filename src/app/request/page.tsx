@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Table2 } from "lucide-react";
 import { CitizenRequestForm } from "@/components/citizen-request-form";
 import { PageShell } from "@/components/page-shell";
 import { contact, office, request } from "@/lib/content";
@@ -31,6 +33,16 @@ export default function RequestPage() {
               <span className="text-gold">{contact.addressLabel}: </span>
               {contact.address}
             </p>
+          </div>
+          <div className="border-t border-white/15 pt-5">
+            <p className="text-sm text-gold">للمكتب — جدول رسمي</p>
+            <Link
+              href="/requests-table"
+              className="mt-3 inline-flex items-center gap-2 rounded-md border border-gold/50 bg-gold/10 px-4 py-3 text-sm font-semibold text-gold transition-colors hover:bg-gold hover:text-[#1a1205]"
+            >
+              <Table2 className="size-4" aria-hidden />
+              فتح جدول الطلبات للطباعة
+            </Link>
           </div>
         </div>
         <CitizenRequestForm />

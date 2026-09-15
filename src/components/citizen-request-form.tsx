@@ -12,6 +12,7 @@ import {
   normalizeWhitespace,
   validateFourPartArabicName,
 } from "@/lib/validation";
+import { REQUESTS_STORAGE_KEY } from "@/lib/requests-table";
 import { buildWhatsAppUrl, openWhatsAppUrl } from "@/lib/whatsapp";
 
 type FieldErrors = {
@@ -64,14 +65,14 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
     setStatus("success");
 
     try {
-      const prev = JSON.parse(localStorage.getItem("citizen-requests") ?? "[]") as unknown[];
+      const prev = JSON.parse(localStorage.getItem(REQUESTS_STORAGE_KEY) ?? "[]") as unknown[];
       const entry = {
         fullName,
         whatsapp: normalizedWhatsapp,
         subject: normalizeWhitespace(subject) || null,
         at: new Date().toISOString(),
       };
-      localStorage.setItem("citizen-requests", JSON.stringify([entry, ...prev].slice(0, 20)));
+      localStorage.setItem(REQUESTS_STORAGE_KEY, JSON.stringify([entry, ...prev].slice(0, 20)));
     } catch {
       // ignore storage failures
     }
