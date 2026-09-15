@@ -1,8 +1,5 @@
 /**
  * Site content for مكتب النائب سالم سوادي الغراوي.
- *
- * Public election/committee facts + office-provided contact/branding.
- * Remaining unknowns stay marked as awaiting confirmation.
  */
 
 export const office = {
@@ -25,8 +22,8 @@ export const office = {
 export const hero = {
   support:
     "متابعة طلبات المواطنين والتنسيق مع الجهات الرسمية لخدمة أهلنا في العراق الحبيب.",
-  primaryCta: "تواصل مع المكتب",
-  secondaryCta: "خدمات المكتب",
+  primaryCta: "قدّم طلباً عبر واتساب",
+  secondaryCta: "اتصل بالمكتب",
 } as const;
 
 export const about = {
@@ -68,12 +65,34 @@ export const services = {
   ],
 } as const;
 
+export const request = {
+  title: "قدّم طلبك",
+  lead: "أدخل اسمك الرباعي ورقم واتسابك، وسنفتح محادثة مباشرة مع المكتب برسالة جاهزة.",
+  fullNameLabel: "الاسم الرباعي",
+  fullNameHint: "أدخل أربعة أسماء بالعربية (مثال: أحمد محمد علي حسن)",
+  fullNamePlaceholder: "الاسم الأول الثاني الثالث الرابع",
+  whatsappLabel: "رقم الواتساب",
+  whatsappHint: "رقم عراقي يبدأ بـ 07 ويتكون من 11 رقماً",
+  whatsappPlaceholder: "07XXXXXXXXX",
+  subjectLabel: "موضوع الطلب (اختياري)",
+  subjectPlaceholder: "مثال: متابعة معاملة خدمية",
+  submit: "إرسال عبر واتساب",
+  success: "تم تجهيز الرسالة. ستُفتح واتساب لإرسالها إلى المكتب.",
+  errors: {
+    required: "يرجى تعبئة الاسم الرباعي ورقم الواتساب.",
+    nameParts: "يرجى إدخال الاسم الرباعي كاملاً (أربعة أسماء).",
+    nameArabic: "الاسم يجب أن يكون بالعربية فقط.",
+    whatsapp: "رقم الواتساب غير صحيح. استخدم صيغة عراقية مثل 07701234567.",
+  },
+} as const;
+
 export const contact = {
   title: "تواصل معنا",
-  lead: "تواصل هاتفياً أو عبر فيسبوك أو أرسل رسالتك عبر النموذج.",
+  lead: "تواصل هاتفياً أو عبر واتساب أو فيسبوك، أو أرسل رسالتك عبر النموذج.",
   phoneDisplay: "07762084894",
   phoneTel: "+9647762084894",
   phoneRaw: "07762084894",
+  whatsappE164: "9647762084894",
   hours: "كل يوم جمعة الساعة 8 مساءً",
   facebookUrl: "https://www.facebook.com/profile.php?id=100050600824425",
   facebookLabel: "صفحة فيسبوك",
@@ -87,15 +106,16 @@ export const contact = {
     subject: "موضوع الطلب",
     message: "تفاصيل الرسالة",
     submit: "إرسال الرسالة",
-    success: "تم استلام رسالتك محلياً. يمكنك أيضاً الاتصال مباشرة على رقم المكتب.",
+    success: "تم استلام رسالتك محلياً. الأفضل استخدام نموذج الطلب عبر واتساب أعلاه.",
     required: "يرجى تعبئة الحقول المطلوبة.",
   },
 } as const;
 
 export const nav = [
-  { href: "#about", label: "عن المكتب" },
-  { href: "#services", label: "الخدمات" },
-  { href: "#contact", label: "تواصل" },
+  { href: "/about", label: "عن المكتب" },
+  { href: "/services", label: "الخدمات" },
+  { href: "/request", label: "قدّم طلباً" },
+  { href: "/contact", label: "تواصل" },
 ] as const;
 
 export const sources = [

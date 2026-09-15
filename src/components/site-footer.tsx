@@ -1,6 +1,7 @@
-import { Phone, Share2 } from "lucide-react";
+import Link from "next/link";
+import { MessageCircle, Phone, Share2 } from "lucide-react";
 import { VisitCounter } from "@/components/visit-counter";
-import { contact, office, sources } from "@/lib/content";
+import { contact, nav, office, sources } from "@/lib/content";
 
 export function SiteFooter() {
   return (
@@ -24,6 +25,13 @@ export function SiteFooter() {
               <Phone className="size-5" aria-hidden />
               <span className="unicode-isolate tabular-nums tracking-wide">{contact.phoneDisplay}</span>
             </a>
+            <Link
+              href="/request"
+              className="inline-flex items-center gap-3 rounded-xl border border-gold/50 bg-gold/10 px-5 py-4 text-lg font-semibold text-gold transition-colors hover:bg-gold hover:text-[#1a1205]"
+            >
+              <MessageCircle className="size-5" aria-hidden />
+              قدّم طلباً
+            </Link>
             <a
               href={contact.facebookUrl}
               target="_blank"
@@ -34,6 +42,14 @@ export function SiteFooter() {
               {contact.facebookLabel}
             </a>
           </div>
+
+          <nav className="mt-6 flex flex-wrap gap-4 text-sm text-white/70" aria-label="روابط سريعة">
+            {nav.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-gold">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
           <p className="mt-5 text-base text-white/80">{contact.hours}</p>
         </div>

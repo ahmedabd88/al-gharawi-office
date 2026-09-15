@@ -2,7 +2,7 @@ import { about, contact, office } from "@/lib/content";
 
 export function About() {
   return (
-    <section id="about" className="scroll-mt-20 border-t border-border/60 bg-background py-16 sm:py-20">
+    <section id="about" className="scroll-mt-24 border-t border-border/60 bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="max-w-3xl">
           <div className="section-rule mb-5" aria-hidden />

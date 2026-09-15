@@ -7,7 +7,7 @@ export function Services() {
   return (
     <section
       id="services"
-      className="scroll-mt-20 border-t border-border/60 bg-[linear-gradient(180deg,#eef4f0_0%,#f4f7f5_100%)] py-20 sm:py-24"
+      className="scroll-mt-24 border-t border-border/60 bg-[linear-gradient(180deg,#f7f3ea_0%,#f4f7f5_55%,#eef2ef_100%)] py-16 sm:py-20"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="max-w-3xl">

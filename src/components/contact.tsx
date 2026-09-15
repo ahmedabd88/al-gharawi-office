@@ -1,14 +1,16 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Phone, Share2 } from "lucide-react";
+import { MessageCircle, Phone, Share2 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contact } from "@/lib/content";
+import { cn } from "@/lib/utils";
 
-export function Contact() {
+export function Contact({ standalone = false }: { standalone?: boolean }) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -28,18 +30,26 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="scroll-mt-20 border-t border-border/60 bg-background py-16 sm:py-20">
+    <section
+      id="contact"
+      className={cn(
+        "scroll-mt-24",
+        standalone ? "bg-background py-12 sm:py-16" : "border-t border-border/60 bg-background py-16 sm:py-20"
+      )}
+    >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="max-w-3xl">
-          <div className="section-rule mb-5" aria-hidden />
-          <h2 className="font-heading text-3xl font-bold text-brand sm:text-4xl">{contact.title}</h2>
-          <p className="mt-3 text-lg text-muted-foreground">{contact.lead}</p>
-        </div>
+        {!standalone ? (
+          <div className="max-w-3xl">
+            <div className="section-rule mb-5" aria-hidden />
+            <h2 className="font-heading text-3xl font-bold text-brand sm:text-4xl">{contact.title}</h2>
+            <p className="mt-3 text-lg text-muted-foreground">{contact.lead}</p>
+          </div>
+        ) : null}
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="space-y-5 rounded-xl bg-[#111111] p-6 text-white sm:p-8">
+        <div className={cn("grid gap-10 lg:grid-cols-[0.85fr_1.15fr]", !standalone && "mt-10")}>
+          <div className="space-y-5 rounded-2xl bg-[#111111] p-6 text-white sm:p-8">
             <div className="border-b border-white/15 pb-5">
-              <p className="text-sm text-gold">الهاتف</p>
+              <p className="text-sm text-gold">الهاتف / واتساب</p>
               <a
                 href={`tel:${contact.phoneTel}`}
                 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold hover:text-gold"
@@ -66,6 +76,17 @@ export function Contact() {
               </a>
             </div>
             <div className="border-b border-white/15 pb-5">
+              <p className="text-sm text-gold">قدّم طلباً سريعاً</p>
+              <Button
+                render={<Link href="/request" />}
+                size="lg"
+                className="mt-3 h-11 rounded-md bg-gold px-5 text-[#1a1205] hover:bg-gold/90"
+              >
+                <MessageCircle className="size-4" aria-hidden />
+                نموذج الاسم الرباعي وواتساب
+              </Button>
+            </div>
+            <div className="border-b border-white/15 pb-5">
               <p className="text-sm text-gold">البريد</p>
               <p className="mt-2 text-white/70">{contact.placeholders.email}</p>
             </div>
@@ -77,7 +98,7 @@ export function Contact() {
 
           <form
             onSubmit={onSubmit}
-            className="space-y-5 rounded-xl border border-border/80 bg-card p-5 shadow-sm sm:p-6"
+            className="space-y-5 rounded-2xl border border-border/80 bg-card p-5 shadow-sm sm:p-6"
             noValidate
           >
             <div className="grid gap-5 sm:grid-cols-2">

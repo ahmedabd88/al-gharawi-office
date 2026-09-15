@@ -1,37 +1,60 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { nav, office } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
-export function SiteHeader() {
+export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "solid" }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const solid = variant === "solid" || pathname !== "/";
 
   return (
-    <header className="absolute inset-x-0 top-0 z-40">
+    <header
+      className={cn(
+        "z-40 w-full transition-colors",
+        solid
+          ? "sticky top-0 border-b border-border/70 bg-[#0a0a0a]/95 text-white backdrop-blur"
+          : "absolute inset-x-0 top-0"
+      )}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <a href="#top" className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg">
+        <Link
+          href="/"
+          className={cn(
+            "font-heading text-base font-semibold sm:text-lg",
+            solid ? "text-white" : "text-white drop-shadow"
+          )}
+        >
           {office.shortBrand}
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="القائمة الرئيسية">
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-white/90 drop-shadow transition-colors hover:text-gold"
-            >
-              {item.label}
-            </a>
-          ))}
+          {nav.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-gold",
+                  active ? "text-gold" : solid ? "text-white/90" : "text-white/90 drop-shadow"
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Button
-            render={<a href="#contact" />}
+            render={<Link href="/request" />}
             size="lg"
             className="rounded-md bg-gold px-4 text-[#1a1205] hover:bg-gold/90"
           >
-            تواصل
+            قدّم طلباً
           </Button>
         </nav>
 
@@ -52,20 +75,20 @@ export function SiteHeader() {
       <div
         id="mobile-nav"
         className={cn(
-          "mx-4 overflow-hidden rounded-xl border border-white/15 bg-black/95 shadow-sm backdrop-blur md:hidden",
-          open ? "mb-3 max-h-64 opacity-100" : "pointer-events-none max-h-0 border-0 opacity-0"
+          "mx-4 overflow-hidden rounded-xl border border-white/15 bg-black/95 shadow-sm backdrop-blur transition-all duration-300 md:hidden",
+          open ? "mb-3 max-h-80 opacity-100" : "pointer-events-none max-h-0 border-0 opacity-0"
         )}
       >
         <nav className="flex flex-col gap-1 p-3" aria-label="قائمة الجوال">
           {nav.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="rounded-lg px-3 py-2.5 text-sm font-medium text-white hover:bg-white/10"
               onClick={() => setOpen(false)}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
