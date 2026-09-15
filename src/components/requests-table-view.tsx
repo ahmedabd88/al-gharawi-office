@@ -1,55 +1,82 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Printer, RefreshCw, Table2, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { LogOut, Printer, RefreshCw, Table2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   citizenToOfficialRow,
   formatOfficeDate,
-  readCitizenRequests,
-  REQUESTS_STORAGE_KEY,
   requestsTableCopy as copy,
   sampleOfficialRows,
+  type CitizenRequestRecord,
   type OfficialRequestRow,
 } from "@/lib/requests-table";
 import { office } from "@/lib/content";
 
+type ApiItem = CitizenRequestRecord & { id?: string };
+
 export function RequestsTableView() {
+  const router = useRouter();
   const [citizenRows, setCitizenRows] = useState<OfficialRequestRow[]>([]);
-  const [includeSamples, setIncludeSamples] = useState(true);
+  const [includeSamples, setIncludeSamples] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [today] = useState(() => formatOfficeDate(new Date()));
 
-  const reload = useCallback(() => {
-    const stored = readCitizenRequests();
-    // Newest first in storage → number them chronologically for the letter
-    const chronological = [...stored].reverse();
-    setCitizenRows(chronological.map((row, index) => citizenToOfficialRow(row, index)));
-    if (stored.length > 0) {
-      setIncludeSamples(false);
+  const reload = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/office/requests", { cache: "no-store" });
+      if (res.status === 401) {
+        router.replace("/office-login?next=/requests-table");
+        return;
+      }
+      const data = (await res.json()) as { ok?: boolean; items?: ApiItem[]; error?: string };
+      if (!res.ok || !data.ok) {
+        setError(data.error || "تعذر تحميل الطلبات");
+        setCitizenRows([]);
+        setLoading(false);
+        return;
+      }
+      const items = data.items ?? [];
+      const chronological = [...items].reverse();
+      setCitizenRows(chronological.map((row, index) => citizenToOfficialRow(row, index)));
+      setIncludeSamples(items.length === 0);
+    } catch {
+      setError("تعذر الاتصال بالخادم");
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
-    reload();
+    void reload();
   }, [reload]);
 
   const rows = useMemo(() => {
-    const merged = includeSamples ? [...sampleOfficialRows, ...citizenRows] : citizenRows;
-    return merged;
+    return includeSamples ? [...sampleOfficialRows, ...citizenRows] : citizenRows;
   }, [citizenRows, includeSamples]);
 
   function onPrint() {
     window.print();
   }
 
-  function onClearCitizen() {
-    try {
-      localStorage.removeItem(REQUESTS_STORAGE_KEY);
-    } catch {
-      // ignore
+  async function onLogout() {
+    await fetch("/api/office/logout", { method: "POST" });
+    router.replace("/office-login");
+    router.refresh();
+  }
+
+  async function onClearCitizen() {
+    if (!window.confirm("مسح كل الطلبات المحفوظة على الخادم؟")) return;
+    const res = await fetch("/api/office/requests", { method: "DELETE" });
+    if (res.status === 401) {
+      router.replace("/office-login?next=/requests-table");
+      return;
     }
-    reload();
-    setIncludeSamples(true);
+    await reload();
   }
 
   return (
@@ -59,10 +86,12 @@ export function RequestsTableView() {
           <div>
             <p className="text-sm text-[#6b5b3a]">{office.brand}</p>
             <h1 className="font-heading text-2xl font-bold sm:text-3xl">{copy.pageTitle}</h1>
-            <p className="mt-2 max-w-3xl text-sm leading-7 text-[#444]">{copy.citizenNote}</p>
+            <p className="mt-2 max-w-3xl text-sm leading-7 text-[#444]">
+              صفحة خاصة بالمكتب فقط بعد تسجيل الدخول. الطلبات تُحفظ مشفّرة على الخادم ولا تظهر للزوار.
+            </p>
           </div>
           <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap lg:w-auto lg:justify-end">
-            <Button type="button" variant="outline" size="lg" className="h-11 w-full rounded-md sm:w-auto" onClick={reload}>
+            <Button type="button" variant="outline" size="lg" className="h-11 w-full rounded-md sm:w-auto" onClick={() => void reload()}>
               <RefreshCw className="size-4" aria-hidden />
               {copy.refresh}
             </Button>
@@ -85,19 +114,29 @@ export function RequestsTableView() {
               <Printer className="size-4" aria-hidden />
               {copy.print}
             </Button>
+            <Button type="button" variant="outline" size="lg" className="h-11 w-full rounded-md sm:w-auto" onClick={() => void onLogout()}>
+              <LogOut className="size-4" aria-hidden />
+              تسجيل الخروج
+            </Button>
           </div>
         </div>
         <p className="text-xs text-[#666]">{copy.printHint}</p>
+        {loading ? <p className="text-sm text-[#555]">جاري تحميل الطلبات...</p> : null}
+        {error ? (
+          <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+            {error}
+          </p>
+        ) : null}
         {citizenRows.length > 0 ? (
           <Button
             type="button"
             variant="ghost"
             size="sm"
             className="w-fit text-destructive hover:text-destructive"
-            onClick={onClearCitizen}
+            onClick={() => void onClearCitizen()}
           >
             <Trash2 className="size-4" aria-hidden />
-            {copy.clearCitizen}
+            مسح الطلبات المحفوظة على الخادم
           </Button>
         ) : null}
       </div>

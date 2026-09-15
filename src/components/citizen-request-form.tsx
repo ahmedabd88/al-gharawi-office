@@ -13,7 +13,6 @@ import {
   normalizeWhitespace,
   validateFourPartArabicName,
 } from "@/lib/validation";
-import { REQUESTS_STORAGE_KEY } from "@/lib/requests-table";
 import { buildWhatsAppUrl, openWhatsAppUrl, type WhatsAppOpenResult } from "@/lib/whatsapp";
 
 type FieldErrors = {
@@ -29,7 +28,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
   const [openResult, setOpenResult] = useState<WhatsAppOpenResult | null>(null);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -65,21 +64,21 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
     });
     const url = buildWhatsAppUrl(contact.whatsappE164, message);
 
+    // Server-side store (write-only for citizens) — office reads via private login.
     try {
-      const prev = JSON.parse(localStorage.getItem(REQUESTS_STORAGE_KEY) ?? "[]") as unknown[];
-      const entry = {
-        fullName,
-        whatsapp: normalizedWhatsapp,
-        subject: normalizeWhitespace(subject) || null,
-        at: new Date().toISOString(),
-      };
-      localStorage.setItem(REQUESTS_STORAGE_KEY, JSON.stringify([entry, ...prev].slice(0, 20)));
+      await fetch("/api/citizen-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName,
+          whatsapp: normalizedWhatsapp,
+          subject: normalizeWhitespace(subject) || null,
+        }),
+      });
     } catch {
-      // ignore storage failures
+      // WhatsApp open should still proceed even if store write fails.
     }
 
-    // Keep URL + success UI ready before navigation so desktop popup-block
-    // still leaves a visible green button; mobile may leave the page via assign().
     setWhatsappUrl(url);
     setStatus("success");
     const result = openWhatsAppUrl(url);

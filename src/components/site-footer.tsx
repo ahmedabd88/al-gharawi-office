@@ -56,9 +56,6 @@ export function SiteFooter() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/requests-table" className="hover:text-gold">
-              جدول الطلبات
-            </Link>
           </nav>
 
           <p className="mt-5 text-base text-white/80">{contact.hours}</p>
