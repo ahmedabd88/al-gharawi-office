@@ -289,6 +289,11 @@
     display: none !important;
   }
 
+  #office-docs-panel,
+  .office-docs-list {
+    display: none !important;
+  }
+
   .requests-table-page {
     background: #fff !important;
     direction: rtl !important;

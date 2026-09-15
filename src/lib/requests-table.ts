@@ -45,7 +45,37 @@ export const requestsTableCopy = {
   citizenNote:
     "الطلبات الواردة من صفحة «قدّم طلباً» تُحفظ على الخادم وتظهر هنا بعد دخول المكتب لطباعتها رسمياً.",
   printHint: "استخدم الطباعة الأفقية (Landscape) للحصول على أفضل مواءمة للأعمدة.",
+  docsPanelTitle: "قائمة الوثائق",
+  hideDocsPanel: "إخفاء القائمة",
+  showDocsPanel: "إظهار القائمة",
+  docsColumns: {
+    status: "الحالة",
+    type: "النوع",
+    title: "العنوان",
+  },
 } as const;
+
+export type OfficeDocListItem = {
+  id: string;
+  status: "مسودة" | "صادر";
+  type: string;
+  title: string;
+};
+
+export const defaultOfficeDocs: OfficeDocListItem[] = [
+  {
+    id: "doc-requests-table",
+    status: "مسودة",
+    type: "جدول",
+    title: "جدول طلبات",
+  },
+  {
+    id: "doc-requests-issued",
+    status: "صادر",
+    type: "جدول",
+    title: "جدول طلبات — نسخة سابقة",
+  },
+];
 
 /** Format a Date as D/M/YYYY for Iraqi office docs */
 export function formatOfficeDate(date: Date = new Date()): string {
