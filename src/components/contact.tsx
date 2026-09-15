@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { WhatsAppOpenLink } from "@/components/whatsapp-open-link";
 import { contact } from "@/lib/content";
 import { buildContactWhatsAppMessage, normalizeWhitespace } from "@/lib/validation";
-import { buildWhatsAppUrl, openWhatsAppUrl } from "@/lib/whatsapp";
+import { buildWhatsAppUrl, openWhatsAppUrl, type WhatsAppOpenResult } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 export function Contact({ standalone = false }: { standalone?: boolean }) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
+  const [openResult, setOpenResult] = useState<WhatsAppOpenResult | null>(null);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -28,6 +30,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
     if (!name || !message) {
       setStatus("error");
       setWhatsappUrl(null);
+      setOpenResult(null);
       return;
     }
 
@@ -35,7 +38,8 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
     const url = buildWhatsAppUrl(contact.whatsappE164, text);
     setWhatsappUrl(url);
     setStatus("success");
-    openWhatsAppUrl(url);
+    const result = openWhatsAppUrl(url);
+    setOpenResult(result);
   }
 
   return (
@@ -61,7 +65,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
               <p className="text-sm text-gold">الهاتف / واتساب</p>
               <a
                 href={`tel:${contact.phoneTel}`}
-                className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold hover:text-gold"
+                className="mt-2 inline-flex min-h-11 items-center gap-2 text-2xl font-semibold hover:text-gold"
                 dir="ltr"
               >
                 <Phone className="size-5" aria-hidden />
@@ -78,7 +82,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
                 href={contact.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-2 text-lg font-medium hover:text-gold"
+                className="mt-2 inline-flex min-h-11 items-center gap-2 text-lg font-medium hover:text-gold"
               >
                 <Share2 className="size-5" aria-hidden />
                 {contact.facebookLabel}
@@ -111,49 +115,61 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
             className="space-y-5 rounded-2xl border border-border/80 bg-card p-5 shadow-sm sm:p-6"
             noValidate
           >
-            <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm text-[#1a1205]">
+            <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm leading-7 text-[#1a1205]">
               {contact.form.hint}
             </p>
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">{contact.form.name}</Label>
-                <Input id="name" name="name" required autoComplete="name" />
+                <Input id="name" name="name" required autoComplete="name" className="min-h-11 text-base md:text-sm" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">{contact.form.phone}</Label>
-                <Input id="phone" name="phone" type="tel" autoComplete="tel" dir="ltr" className="text-start" />
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  dir="ltr"
+                  className="min-h-11 text-start text-base md:text-sm"
+                />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="subject">{contact.form.subject}</Label>
-              <Input id="subject" name="subject" />
+              <Input id="subject" name="subject" className="min-h-11 text-base md:text-sm" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="message">{contact.form.message}</Label>
-              <Textarea id="message" name="message" required rows={5} />
+              <Textarea id="message" name="message" required rows={5} className="min-h-28 text-base md:text-sm" />
             </div>
 
             {status === "error" ? (
-              <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+              <p
+                className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                role="alert"
+              >
                 {contact.form.required}
               </p>
             ) : null}
             {status === "success" && whatsappUrl ? (
-              <div className="space-y-2 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-sm text-emerald-900" role="status">
-                <p>{contact.form.success}</p>
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex font-semibold text-emerald-950 underline underline-offset-4"
-                >
-                  {contact.form.openManual}
-                </a>
+              <div
+                className="space-y-3 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-emerald-950"
+                role="status"
+              >
+                <p className="text-sm leading-7">
+                  {openResult === "blocked" ? contact.form.successBlocked : contact.form.success}
+                </p>
+                <WhatsAppOpenLink href={whatsappUrl} label={contact.form.openManual} />
               </div>
             ) : null}
 
-            <Button type="submit" size="lg" className="h-11 w-full rounded-md bg-[#111111] text-white hover:bg-black sm:w-auto sm:px-8">
+            <Button
+              type="submit"
+              size="lg"
+              className="h-12 w-full rounded-md bg-[#111111] text-base text-white hover:bg-black sm:w-auto sm:px-8"
+            >
               <MessageCircle className="size-4" aria-hidden />
               {contact.form.submit}
             </Button>

@@ -55,14 +55,14 @@ export function RequestsTableView() {
   return (
     <div className="requests-table-page bg-[#f7f4ee] text-[#111]">
       <div className="no-print mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-sm text-[#6b5b3a]">{office.brand}</p>
             <h1 className="font-heading text-2xl font-bold sm:text-3xl">{copy.pageTitle}</h1>
             <p className="mt-2 max-w-3xl text-sm leading-7 text-[#444]">{copy.citizenNote}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button type="button" variant="outline" size="lg" className="rounded-md" onClick={reload}>
+          <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap lg:w-auto lg:justify-end">
+            <Button type="button" variant="outline" size="lg" className="h-11 w-full rounded-md sm:w-auto" onClick={reload}>
               <RefreshCw className="size-4" aria-hidden />
               {copy.refresh}
             </Button>
@@ -70,7 +70,7 @@ export function RequestsTableView() {
               type="button"
               variant="outline"
               size="lg"
-              className="rounded-md"
+              className="h-11 w-full rounded-md sm:w-auto"
               onClick={() => setIncludeSamples((v) => !v)}
             >
               <Table2 className="size-4" aria-hidden />
@@ -79,7 +79,7 @@ export function RequestsTableView() {
             <Button
               type="button"
               size="lg"
-              className="rounded-md bg-[#111] text-white hover:bg-black"
+              className="h-11 w-full rounded-md bg-[#111] text-white hover:bg-black sm:w-auto"
               onClick={onPrint}
             >
               <Printer className="size-4" aria-hidden />

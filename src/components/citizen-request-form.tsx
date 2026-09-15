@@ -5,6 +5,7 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { WhatsAppOpenLink } from "@/components/whatsapp-open-link";
 import { contact, request } from "@/lib/content";
 import {
   buildCitizenWhatsAppMessage,
@@ -13,7 +14,7 @@ import {
   validateFourPartArabicName,
 } from "@/lib/validation";
 import { REQUESTS_STORAGE_KEY } from "@/lib/requests-table";
-import { buildWhatsAppUrl, openWhatsAppUrl } from "@/lib/whatsapp";
+import { buildWhatsAppUrl, openWhatsAppUrl, type WhatsAppOpenResult } from "@/lib/whatsapp";
 
 type FieldErrors = {
   fullName?: string;
@@ -26,6 +27,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
+  const [openResult, setOpenResult] = useState<WhatsAppOpenResult | null>(null);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,6 +52,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       setErrors(nextErrors);
       setStatus("error");
       setWhatsappUrl(null);
+      setOpenResult(null);
       return;
     }
 
@@ -61,8 +64,6 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       subject,
     });
     const url = buildWhatsAppUrl(contact.whatsappE164, message);
-    setWhatsappUrl(url);
-    setStatus("success");
 
     try {
       const prev = JSON.parse(localStorage.getItem(REQUESTS_STORAGE_KEY) ?? "[]") as unknown[];
@@ -77,7 +78,12 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       // ignore storage failures
     }
 
-    openWhatsAppUrl(url);
+    // Keep URL + success UI ready before navigation so desktop popup-block
+    // still leaves a visible green button; mobile may leave the page via assign().
+    setWhatsappUrl(url);
+    setStatus("success");
+    const result = openWhatsAppUrl(url);
+    setOpenResult(result);
   }
 
   return (
@@ -90,9 +96,13 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       }
       noValidate
     >
-      <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm text-[#1a1205]">
+      <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm leading-7 text-[#1a1205]">
         {request.popupHint}
       </p>
+      <ul className="space-y-1 text-xs leading-6 text-muted-foreground">
+        <li>• {request.deviceTips.mobile}</li>
+        <li>• {request.deviceTips.desktop}</li>
+      </ul>
 
       <div className="space-y-2">
         <Label htmlFor="fullName">{request.fullNameLabel}</Label>
@@ -104,6 +114,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
           placeholder={request.fullNamePlaceholder}
           aria-invalid={Boolean(errors.fullName)}
           aria-describedby="fullName-hint"
+          className="min-h-11 text-base md:text-sm"
         />
         <p id="fullName-hint" className="text-xs text-muted-foreground">
           {request.fullNameHint}
@@ -125,7 +136,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
           required
           autoComplete="tel"
           dir="ltr"
-          className="text-start tabular-nums"
+          className="min-h-11 text-start text-base tabular-nums md:text-sm"
           placeholder={request.whatsappPlaceholder}
           aria-invalid={Boolean(errors.whatsapp)}
           aria-describedby="whatsapp-hint"
@@ -142,20 +153,23 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
 
       <div className="space-y-2">
         <Label htmlFor="subject">{request.subjectLabel}</Label>
-        <Input id="subject" name="subject" placeholder={request.subjectPlaceholder} />
+        <Input
+          id="subject"
+          name="subject"
+          placeholder={request.subjectPlaceholder}
+          className="min-h-11 text-base md:text-sm"
+        />
       </div>
 
       {status === "success" && whatsappUrl ? (
-        <div className="space-y-2 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-sm text-emerald-900" role="status">
-          <p>{request.success}</p>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex font-semibold text-emerald-950 underline underline-offset-4"
-          >
-            {request.openManual}
-          </a>
+        <div
+          className="space-y-3 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-emerald-950"
+          role="status"
+        >
+          <p className="text-sm leading-7">
+            {openResult === "blocked" ? request.successBlocked : request.success}
+          </p>
+          <WhatsAppOpenLink href={whatsappUrl} label={request.openManual} />
         </div>
       ) : null}
 
