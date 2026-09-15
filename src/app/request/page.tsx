@@ -25,6 +25,10 @@ export default function RequestPage() {
               {contact.phoneDisplay}
             </p>
             <p className="mt-4 text-white/70">أوقات الاستقبال: {contact.hours}</p>
+            <p className="mt-4 text-white/90">
+              <span className="text-gold">{contact.addressLabel}: </span>
+              {contact.address}
+            </p>
           </div>
         </div>
         <CitizenRequestForm />

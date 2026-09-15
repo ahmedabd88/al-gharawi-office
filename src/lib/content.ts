@@ -88,7 +88,7 @@ export const request = {
 
 export const contact = {
   title: "تواصل معنا",
-  lead: "تواصل هاتفياً أو عبر واتساب أو فيسبوك، أو أرسل رسالتك عبر النموذج.",
+  lead: "تواصل هاتفياً أو عبر واتساب أو فيسبوك، أو زر المكتب في بغداد، المحمودية، حي البتول.",
   phoneDisplay: "07762084894",
   phoneTel: "+9647762084894",
   phoneRaw: "07762084894",
@@ -96,9 +96,11 @@ export const contact = {
   hours: "كل يوم جمعة الساعة 8 مساءً",
   facebookUrl: "https://www.facebook.com/profile.php?id=100050600824425",
   facebookLabel: "صفحة فيسبوك",
+  /** العنوان الفعلي للمكتب (ليس الدائرة الانتخابية) */
+  address: "بغداد، المحمودية، حي البتول",
+  addressLabel: "عنوان المكتب",
   placeholders: {
     email: "البريد الإلكتروني — يُحدَّث لاحقاً",
-    address: "عنوان المكتب — يُحدَّث لاحقاً",
   },
   form: {
     name: "الاسم الكامل",

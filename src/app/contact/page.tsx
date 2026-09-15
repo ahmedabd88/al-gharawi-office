@@ -5,7 +5,7 @@ import { contact, office } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: `تواصل | ${office.brand}`,
-  description: contact.lead,
+  description: `${contact.lead} عنوان المكتب: ${contact.address}.`,
 };
 
 export default function ContactPage() {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MessageCircle, Phone, Share2 } from "lucide-react";
+import { MapPin, MessageCircle, Phone, Share2 } from "lucide-react";
 import { VisitCounter } from "@/components/visit-counter";
 import { contact, nav, office, sources } from "@/lib/content";
 
@@ -14,6 +14,13 @@ export function SiteFooter() {
           </p>
           <p className="mt-4 max-w-xl text-base leading-8 text-white/75">
             خدمة أهلنا في العراق الحبيب · {office.district} · انتخابات {office.electionYear}
+          </p>
+          <p className="mt-3 inline-flex max-w-xl items-start gap-2 text-base leading-8 text-white/85">
+            <MapPin className="mt-1 size-5 shrink-0 text-gold" aria-hidden />
+            <span>
+              <span className="text-gold">{contact.addressLabel}: </span>
+              {contact.address}
+            </span>
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">

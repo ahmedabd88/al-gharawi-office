@@ -91,8 +91,8 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
               <p className="mt-2 text-white/70">{contact.placeholders.email}</p>
             </div>
             <div>
-              <p className="text-sm text-gold">العنوان</p>
-              <p className="mt-2 text-white/70">{contact.placeholders.address}</p>
+              <p className="text-sm text-gold">{contact.addressLabel}</p>
+              <p className="mt-2 text-lg text-white/90">{contact.address}</p>
             </div>
           </div>
 
