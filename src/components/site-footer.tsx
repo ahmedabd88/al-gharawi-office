@@ -66,7 +66,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col items-start gap-8 md:items-end">
           <VisitCounter />
-          <div className="text-sm leading-7 text-white/60 md:text-end">
+          <div className="text-sm leading-7 text-white/60 md:text-start">
             <p className="mb-2 text-base font-medium text-white/90">مصادر عامة مستخدمة في المحتوى</p>
             {sources.map((source) => (
               <a

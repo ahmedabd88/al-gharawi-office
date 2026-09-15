@@ -103,8 +103,12 @@ export function RequestsTableView() {
       </div>
 
       <div className="mx-auto max-w-[1100px] px-3 pb-10 sm:px-6">
-        <article className="official-sheet border border-[#222] bg-white p-4 shadow-sm sm:p-8 print:border-0 print:p-0 print:shadow-none">
-          <header className="mb-5 text-center">
+        <article
+          className="official-sheet border border-[#222] bg-white p-4 shadow-sm sm:p-8 print:border-0 print:p-0 print:shadow-none"
+          dir="rtl"
+          lang="ar"
+        >
+          <header className="mb-5 text-right">
             <p className="font-heading text-lg font-bold leading-9 sm:text-xl">{copy.addressee}</p>
             <p className="mt-1 font-heading text-base font-semibold text-[#222] sm:text-lg">
               {copy.documentTitle}
@@ -112,7 +116,7 @@ export function RequestsTableView() {
             <p className="mt-2 text-sm text-[#444]">{copy.officeLine}</p>
             <p className="mt-3 text-sm">
               <span className="font-semibold">{copy.dateLabel}: </span>
-              <span dir="ltr" className="unicode-isolate tabular-nums">
+              <span dir="ltr" className="unicode-isolate inline-block tabular-nums">
                 {today}
               </span>
             </p>
@@ -128,7 +132,7 @@ export function RequestsTableView() {
               <thead>
                 <tr>
                   {copy.columns.map((col) => (
-                    <th key={col.key} scope="col">
+                    <th key={col.key} scope="col" className="text-right">
                       {col.label}
                     </th>
                   ))}
@@ -137,38 +141,37 @@ export function RequestsTableView() {
               <tbody>
                 {rows.length === 0 ? (
                   <tr>
-                    <td colSpan={copy.columns.length} className="empty-cell">
+                    <td colSpan={copy.columns.length} className="empty-cell text-right">
                       {copy.empty}
                     </td>
                   </tr>
                 ) : (
                   rows.map((row, index) => (
                     <tr key={row.id}>
-                      <td className="cell-seq" dir="ltr">
+                      <td className="cell-seq text-right" dir="ltr">
                         {index + 1}
                       </td>
-                      <td>{row.letterRef}</td>
-                      <td>{row.subject}</td>
-                      <td className="cell-content">{row.content}</td>
-                      <td className="cell-phone" dir="ltr">
+                      <td className="text-right">{row.letterRef}</td>
+                      <td className="text-right">{row.subject}</td>
+                      <td className="cell-content text-right">{row.content}</td>
+                      <td className="cell-phone text-right" dir="ltr">
                         {row.phone}
                       </td>
-                      <td className="cell-directive">{row.directive || "\u00a0"}</td>
+                      <td className="cell-directive text-right">{row.directive || "\u00a0"}</td>
                     </tr>
                   ))
                 )}
-                {/* Extra blank lines for handwriting when printing */}
                 {rows.length > 0
                   ? Array.from({ length: Math.max(0, 3) }).map((_, i) => (
                       <tr key={`blank-${i}`} className="blank-row">
-                        <td className="cell-seq" dir="ltr">
+                        <td className="cell-seq text-right" dir="ltr">
                           {rows.length + i + 1}
                         </td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td className="cell-directive">&nbsp;</td>
+                        <td className="text-right">&nbsp;</td>
+                        <td className="text-right">&nbsp;</td>
+                        <td className="text-right">&nbsp;</td>
+                        <td className="text-right">&nbsp;</td>
+                        <td className="cell-directive text-right">&nbsp;</td>
                       </tr>
                     ))
                   : null}
@@ -176,12 +179,12 @@ export function RequestsTableView() {
             </table>
           </div>
 
-          <footer className="mt-8 grid gap-6 text-sm sm:grid-cols-2 print:mt-10">
+          <footer className="mt-8 grid gap-6 text-right text-sm sm:grid-cols-2 print:mt-10">
             <div>
               <p className="font-semibold">إعداد المكتب</p>
               <p className="mt-6">التوقيع: ........................</p>
             </div>
-            <div className="sm:text-start">
+            <div>
               <p className="font-semibold">للاستخدام الرسمي</p>
               <p className="mt-2 text-[#555]">عمود «توجيه سيادتكم» يُعبَّأ يدوياً بعد العرض.</p>
             </div>

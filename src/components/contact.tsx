@@ -132,7 +132,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
                   type="tel"
                   autoComplete="tel"
                   dir="ltr"
-                  className="min-h-11 text-start text-base md:text-sm"
+                  className="min-h-11 text-right text-base md:text-sm"
                 />
               </div>
             </div>

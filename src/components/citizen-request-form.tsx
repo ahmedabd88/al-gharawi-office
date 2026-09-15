@@ -136,7 +136,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
           required
           autoComplete="tel"
           dir="ltr"
-          className="min-h-11 text-start text-base tabular-nums md:text-sm"
+          className="min-h-11 text-right text-base tabular-nums md:text-sm"
           placeholder={request.whatsappPlaceholder}
           aria-invalid={Boolean(errors.whatsapp)}
           aria-describedby="whatsapp-hint"
