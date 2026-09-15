@@ -272,6 +272,62 @@
   text-align: right;
 }
 
+/* Organized office transactions table */
+.office-tx-table {
+  table-layout: fixed;
+  width: 100%;
+  direction: rtl;
+}
+
+.office-tx-table th,
+.office-tx-table td {
+  border-bottom: 1px solid rgba(34, 34, 34, 0.12);
+  padding: 0.85rem 0.9rem;
+  text-align: right;
+  vertical-align: middle;
+  line-height: 1.55;
+}
+
+.office-tx-table thead th {
+  background: #f0ece3;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #222;
+  white-space: nowrap;
+}
+
+.office-tx-table tbody tr:hover {
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.office-tx-table .cell-title {
+  font-weight: 600;
+  color: #171717;
+}
+
+.office-tx-table .cell-num,
+.office-tx-table .cell-date {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: #444;
+}
+
+.office-tx-table .status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.office-tx-table .empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #666;
+}
+
 @media print {
   @page {
     size: A4 landscape;
