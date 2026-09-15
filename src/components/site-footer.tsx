@@ -2,8 +2,9 @@ import Link from "next/link";
 import { MapPin, MessageCircle, Phone, Share2 } from "lucide-react";
 import { VisitCounter } from "@/components/visit-counter";
 import { contact, nav, office, sources } from "@/lib/content";
+import type { SiteContentSnapshot } from "@/lib/site-content";
 
-export function SiteFooter() {
+export function SiteFooter({ site }: { site: SiteContentSnapshot }) {
   return (
     <footer className="border-t-4 border-gold bg-[#0a0a0a] text-[#f7f1e4]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.2fr_0.8fr] md:py-16">
@@ -18,19 +19,19 @@ export function SiteFooter() {
           <p className="mt-3 inline-flex max-w-xl items-start gap-2 text-base leading-8 text-white/85">
             <MapPin className="mt-1 size-5 shrink-0 text-gold" aria-hidden />
             <span>
-              <span className="text-gold">{contact.addressLabel}: </span>
-              {contact.address}
+              <span className="text-gold">{site.addressLabel}: </span>
+              {site.address}
             </span>
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             <a
-              href={`tel:${contact.phoneTel}`}
+              href={`tel:${site.phoneTel}`}
               className="inline-flex items-center gap-3 rounded-xl border border-white/20 px-5 py-4 text-lg font-semibold transition-colors hover:border-gold hover:text-gold"
               dir="ltr"
             >
               <Phone className="size-5" aria-hidden />
-              <span className="unicode-isolate tabular-nums tracking-wide">{contact.phoneDisplay}</span>
+              <span className="unicode-isolate tabular-nums tracking-wide">{site.phoneDisplay}</span>
             </a>
             <Link
               href="/request"
@@ -40,7 +41,7 @@ export function SiteFooter() {
               قدّم طلباً
             </Link>
             <a
-              href={contact.facebookUrl}
+              href={site.facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 rounded-xl border border-white/20 px-5 py-4 text-lg font-semibold transition-colors hover:border-gold hover:text-gold"
@@ -58,7 +59,7 @@ export function SiteFooter() {
             ))}
           </nav>
 
-          <p className="mt-5 text-base text-white/80">{contact.hours}</p>
+          <p className="mt-5 text-base text-white/80">{site.hours}</p>
         </div>
 
         <div className="flex flex-col items-start gap-8 md:items-end">

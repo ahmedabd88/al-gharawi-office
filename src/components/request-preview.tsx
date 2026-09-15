@@ -3,8 +3,9 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CitizenRequestForm } from "@/components/citizen-request-form";
 import { request } from "@/lib/content";
+import type { SiteContentSnapshot } from "@/lib/site-content";
 
-export function RequestPreview() {
+export function RequestPreview({ site }: { site: SiteContentSnapshot }) {
   return (
     <section
       id="request"
@@ -32,7 +33,11 @@ export function RequestPreview() {
         </div>
 
         <div className="animate-rise-delay-1 rounded-2xl bg-white p-5 text-foreground shadow-lg sm:p-7">
-          <CitizenRequestForm compact />
+          <CitizenRequestForm
+            compact
+            phoneDisplay={site.phoneDisplay}
+            whatsappE164={site.whatsappE164}
+          />
         </div>
       </div>
     </section>

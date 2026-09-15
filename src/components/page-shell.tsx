@@ -2,16 +2,22 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { getSiteContentSnapshot } from "@/lib/site-content-store";
+import type { SiteContentSnapshot } from "@/lib/site-content";
 
-export function PageShell({
+export async function PageShell({
   title,
   lead,
   children,
+  site: siteProp,
 }: {
   title: string;
   lead: string;
   children: ReactNode;
+  site?: SiteContentSnapshot;
 }) {
+  const site = siteProp ?? (await getSiteContentSnapshot());
+
   return (
     <>
       <SiteHeader variant="solid" />
@@ -31,7 +37,7 @@ export function PageShell({
         </section>
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">{children}</div>
       </main>
-      <SiteFooter />
+      <SiteFooter site={site} />
     </>
   );
 }

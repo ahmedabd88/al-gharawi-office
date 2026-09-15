@@ -2,13 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { contact, hero, office } from "@/lib/content";
+import { office } from "@/lib/content";
+import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
  * First viewport: full-bleed banner + brand band with CTAs (no scroll required).
  * Image flexes to fill remaining height above the band.
  */
-export function Hero() {
+export function Hero({ site }: { site: SiteContentSnapshot }) {
   return (
     <section
       id="top"
@@ -39,7 +40,7 @@ export function Hero() {
               {office.brand}
             </h1>
             <p className="mt-2 text-sm leading-7 text-white/75 sm:mt-3 sm:text-base sm:leading-8 md:text-lg">
-              {hero.support}
+              {site.heroSupport}
             </p>
           </div>
 
@@ -51,10 +52,10 @@ export function Hero() {
               className="h-11 rounded-md bg-gold px-6 text-sm text-[#1a1205] hover:bg-gold/90 sm:h-12 sm:px-7 sm:text-base"
             >
               <MessageCircle className="size-4" aria-hidden />
-              {hero.primaryCta}
+              {site.heroPrimaryCta}
             </Button>
             <Button
-              render={<a href={`tel:${contact.phoneTel}`} />}
+              render={<a href={`tel:${site.phoneTel}`} />}
               nativeButton={false}
               variant="outline"
               size="lg"
@@ -62,7 +63,7 @@ export function Hero() {
             >
               <Phone className="size-4" aria-hidden />
               <span dir="ltr" className="unicode-isolate tabular-nums tracking-wide">
-                {contact.phoneDisplay}
+                {site.phoneDisplay}
               </span>
             </Button>
           </div>

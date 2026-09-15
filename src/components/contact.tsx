@@ -9,11 +9,18 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { WhatsAppOpenLink } from "@/components/whatsapp-open-link";
 import { contact } from "@/lib/content";
+import type { SiteContentSnapshot } from "@/lib/site-content";
 import { buildContactWhatsAppMessage, normalizeWhitespace } from "@/lib/validation";
 import { buildWhatsAppUrl, openWhatsAppUrl, type WhatsAppOpenResult } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
-export function Contact({ standalone = false }: { standalone?: boolean }) {
+export function Contact({
+  standalone = false,
+  site,
+}: {
+  standalone?: boolean;
+  site: SiteContentSnapshot;
+}) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
   const [openResult, setOpenResult] = useState<WhatsAppOpenResult | null>(null);
@@ -35,7 +42,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
     }
 
     const text = buildContactWhatsAppMessage({ name, phone, subject, message });
-    const url = buildWhatsAppUrl(contact.whatsappE164, text);
+    const url = buildWhatsAppUrl(site.whatsappE164, text);
     setWhatsappUrl(url);
     setStatus("success");
     const result = openWhatsAppUrl(url);
@@ -55,7 +62,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
           <div className="max-w-3xl">
             <div className="section-rule mb-5" aria-hidden />
             <h2 className="font-heading text-3xl font-bold text-brand sm:text-4xl">{contact.title}</h2>
-            <p className="mt-3 text-lg text-muted-foreground">{contact.lead}</p>
+            <p className="mt-3 text-lg text-muted-foreground">{site.contactLead}</p>
           </div>
         ) : null}
 
@@ -64,22 +71,22 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
             <div className="border-b border-white/15 pb-5">
               <p className="text-sm text-gold">الهاتف / واتساب</p>
               <a
-                href={`tel:${contact.phoneTel}`}
+                href={`tel:${site.phoneTel}`}
                 className="mt-2 inline-flex min-h-11 items-center gap-2 text-2xl font-semibold hover:text-gold"
                 dir="ltr"
               >
                 <Phone className="size-5" aria-hidden />
-                <span className="unicode-isolate tabular-nums tracking-wide">{contact.phoneDisplay}</span>
+                <span className="unicode-isolate tabular-nums tracking-wide">{site.phoneDisplay}</span>
               </a>
             </div>
             <div className="border-b border-white/15 pb-5">
               <p className="text-sm text-gold">أوقات الاستقبال</p>
-              <p className="mt-2 text-lg">{contact.hours}</p>
+              <p className="mt-2 text-lg">{site.hours}</p>
             </div>
             <div className="border-b border-white/15 pb-5">
               <p className="text-sm text-gold">فيسبوك</p>
               <a
-                href={contact.facebookUrl}
+                href={site.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex min-h-11 items-center gap-2 text-lg font-medium hover:text-gold"
@@ -105,8 +112,8 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
               <p className="mt-2 text-white/70">{contact.placeholders.email}</p>
             </div>
             <div>
-              <p className="text-sm text-gold">{contact.addressLabel}</p>
-              <p className="mt-2 text-lg text-white/90">{contact.address}</p>
+              <p className="text-sm text-gold">{site.addressLabel}</p>
+              <p className="mt-2 text-lg text-white/90">{site.address}</p>
             </div>
           </div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, Suspense, useMemo, useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,8 +11,8 @@ function OfficeLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextPath = useMemo(() => {
-    const next = searchParams.get("next") || "/requests-table";
-    return next.startsWith("/") ? next : "/requests-table";
+    const next = searchParams.get("next") || "/office";
+    return next.startsWith("/") ? next : "/office";
   }, [searchParams]);
 
   const [password, setPassword] = useState("");
@@ -84,16 +83,12 @@ function OfficeLoginForm() {
           disabled={loading}
           className="h-12 w-full rounded-md bg-[#111] text-white hover:bg-black"
         >
-          {loading ? "جاري التحقق..." : "دخول إلى جدول الطلبات"}
+          {loading ? "جاري التحقق..." : "دخول إلى لوحة التحكم"}
         </Button>
       </form>
 
       <p className="mt-6 text-xs leading-6 text-muted-foreground">
-        هذه الصفحة سرية لموظفي المكتب فقط. النموذج العام للمواطنين يبقى على{" "}
-        <Link href="/request" className="text-gold underline-offset-4 hover:underline">
-          قدّم طلباً
-        </Link>
-        .
+        بوابة سرية لأحمد والمكتب فقط — لوحة التحكم غير ظاهرة في القائمة العامة.
       </p>
     </div>
   );

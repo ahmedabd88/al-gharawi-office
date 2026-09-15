@@ -1,6 +1,7 @@
-import { about, contact, office } from "@/lib/content";
+import { about, office } from "@/lib/content";
+import type { SiteContentSnapshot } from "@/lib/site-content";
 
-export function About() {
+export function About({ site }: { site: SiteContentSnapshot }) {
   return (
     <section id="about" className="scroll-mt-24 border-t border-border/60 bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -35,17 +36,17 @@ export function About() {
               </div>
               <div>
                 <dt className="font-medium text-gold/90">الاستقبال</dt>
-                <dd className="mt-1 text-white/75">{contact.hours}</dd>
+                <dd className="mt-1 text-white/75">{site.hours}</dd>
               </div>
               <div>
                 <dt className="font-medium text-gold/90">الهاتف</dt>
                 <dd className="mt-1">
                   <a
-                    href={`tel:${contact.phoneTel}`}
+                    href={`tel:${site.phoneTel}`}
                     className="unicode-isolate text-white/90 hover:text-gold"
                     dir="ltr"
                   >
-                    {contact.phoneDisplay}
+                    {site.phoneDisplay}
                   </a>
                 </dd>
               </div>

@@ -3,36 +3,37 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { getEncryptionKey } from "@/lib/office-auth";
-import type { CitizenRequestRecord } from "@/lib/requests-table";
-
-export type StoredCitizenRequest = CitizenRequestRecord & {
-  id: string;
-};
+import {
+  mergeEditableContent,
+  toSiteContentSnapshot,
+  type EditableSiteContent,
+  type SiteContentSnapshot,
+} from "@/lib/site-content";
 
 type StoreFile = {
   version: 1;
   updatedAt: string;
-  items: StoredCitizenRequest[];
+  content: EditableSiteContent;
 };
 
-const MEMORY_KEY = "__al_gharawi_office_requests__";
+const MEMORY_KEY = "__al_gharawi_site_content__";
 
 type GlobalStore = typeof globalThis & {
   [MEMORY_KEY]?: StoreFile;
 };
 
-function memoryStore(): StoreFile {
-  const g = globalThis as GlobalStore;
-  if (!g[MEMORY_KEY]) {
-    g[MEMORY_KEY] = { version: 1, updatedAt: new Date().toISOString(), items: [] };
-  }
-  return g[MEMORY_KEY]!;
+function memoryStore(): StoreFile | null {
+  return (globalThis as GlobalStore)[MEMORY_KEY] ?? null;
+}
+
+function setMemory(data: StoreFile) {
+  (globalThis as GlobalStore)[MEMORY_KEY] = data;
 }
 
 function candidatePaths(): string[] {
   return [
-    path.join(process.cwd(), "data", "office-requests.enc"),
-    path.join(os.tmpdir(), "al-gharawi-office-requests.enc"),
+    path.join(process.cwd(), "data", "site-content.enc"),
+    path.join(os.tmpdir(), "al-gharawi-site-content.enc"),
   ];
 }
 
@@ -57,7 +58,7 @@ function decryptJson(payload: string): StoreFile | null {
     decipher.setAuthTag(tag);
     const plaintext = Buffer.concat([decipher.update(encrypted), decipher.final()]);
     const parsed = JSON.parse(plaintext.toString("utf8")) as StoreFile;
-    if (!parsed || !Array.isArray(parsed.items)) return null;
+    if (!parsed?.content || typeof parsed.content !== "object") return null;
     return parsed;
   } catch {
     return null;
@@ -71,7 +72,7 @@ async function readFromDisk(): Promise<StoreFile | null> {
       const data = decryptJson(payload.trim());
       if (data) return data;
     } catch {
-      // try next path
+      // try next
     }
   }
   return null;
@@ -91,41 +92,39 @@ async function writeToDisk(data: StoreFile): Promise<boolean> {
   return false;
 }
 
-export async function listOfficeRequests(): Promise<StoredCitizenRequest[]> {
+export async function loadEditableSiteContent(): Promise<{
+  content: EditableSiteContent;
+  updatedAt: string | null;
+}> {
   const fromDisk = await readFromDisk();
   if (fromDisk) {
-    memoryStore().items = fromDisk.items;
-    memoryStore().updatedAt = fromDisk.updatedAt;
-    return [...fromDisk.items];
+    setMemory(fromDisk);
+    return {
+      content: mergeEditableContent(fromDisk.content),
+      updatedAt: fromDisk.updatedAt,
+    };
   }
-  return [...memoryStore().items];
+  const mem = memoryStore();
+  if (mem) {
+    return { content: mergeEditableContent(mem.content), updatedAt: mem.updatedAt };
+  }
+  return { content: mergeEditableContent(null), updatedAt: null };
 }
 
-export async function appendOfficeRequest(
-  input: Omit<CitizenRequestRecord, "at"> & { at?: string }
-): Promise<StoredCitizenRequest> {
-  const current = (await readFromDisk()) ?? memoryStore();
-  const entry: StoredCitizenRequest = {
-    id: randomBytes(8).toString("hex"),
-    fullName: input.fullName,
-    whatsapp: input.whatsapp,
-    subject: input.subject ?? null,
-    at: input.at ?? new Date().toISOString(),
-  };
+export async function getSiteContentSnapshot(): Promise<SiteContentSnapshot> {
+  const { content, updatedAt } = await loadEditableSiteContent();
+  return toSiteContentSnapshot(content, updatedAt);
+}
+
+export async function saveEditableSiteContent(
+  content: EditableSiteContent
+): Promise<SiteContentSnapshot> {
   const next: StoreFile = {
     version: 1,
     updatedAt: new Date().toISOString(),
-    items: [entry, ...current.items].slice(0, 500),
+    content: mergeEditableContent(content),
   };
-  memoryStore().items = next.items;
-  memoryStore().updatedAt = next.updatedAt;
+  setMemory(next);
   await writeToDisk(next);
-  return entry;
-}
-
-export async function clearOfficeRequests(): Promise<void> {
-  const next: StoreFile = { version: 1, updatedAt: new Date().toISOString(), items: [] };
-  memoryStore().items = [];
-  memoryStore().updatedAt = next.updatedAt;
-  await writeToDisk(next);
+  return toSiteContentSnapshot(next.content, next.updatedAt);
 }

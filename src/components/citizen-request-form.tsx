@@ -22,7 +22,15 @@ type FieldErrors = {
 
 const errorMap = request.errors;
 
-export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
+export function CitizenRequestForm({
+  compact = false,
+  phoneDisplay = contact.phoneDisplay,
+  whatsappE164 = contact.whatsappE164,
+}: {
+  compact?: boolean;
+  phoneDisplay?: string;
+  whatsappE164?: string;
+}) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
@@ -62,7 +70,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       whatsapp: normalizedWhatsapp!,
       subject,
     });
-    const url = buildWhatsAppUrl(contact.whatsappE164, message);
+    const url = buildWhatsAppUrl(whatsappE164, message);
 
     // Server-side store (write-only for citizens) — office reads via private login.
     try {
@@ -184,7 +192,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       <p className="text-xs text-muted-foreground">
         رقم واتساب المكتب:{" "}
         <span dir="ltr" className="unicode-isolate tabular-nums">
-          {contact.phoneDisplay}
+          {phoneDisplay}
         </span>
       </p>
     </form>
