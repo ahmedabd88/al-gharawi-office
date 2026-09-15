@@ -12,6 +12,7 @@ import {
   normalizeWhitespace,
   validateFourPartArabicName,
 } from "@/lib/validation";
+import { buildWhatsAppUrl, openWhatsAppUrl } from "@/lib/whatsapp";
 
 type FieldErrors = {
   fullName?: string;
@@ -23,6 +24,7 @@ const errorMap = request.errors;
 export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -46,19 +48,21 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       setStatus("error");
+      setWhatsappUrl(null);
       return;
     }
 
     setErrors({});
-    setStatus("success");
 
     const message = buildCitizenWhatsAppMessage({
       fullName,
       whatsapp: normalizedWhatsapp!,
       subject,
     });
+    const url = buildWhatsAppUrl(contact.whatsappE164, message);
+    setWhatsappUrl(url);
+    setStatus("success");
 
-    // Keep a local breadcrumb for the citizen (no server/DB).
     try {
       const prev = JSON.parse(localStorage.getItem("citizen-requests") ?? "[]") as unknown[];
       const entry = {
@@ -72,11 +76,7 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       // ignore storage failures
     }
 
-    const url = `https://wa.me/${contact.whatsappE164}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-
-    // Also useful if popup blocked: navigate same tab after short delay fallback via link click
-    form.reset();
+    openWhatsAppUrl(url);
   }
 
   return (
@@ -89,6 +89,10 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
       }
       noValidate
     >
+      <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm text-[#1a1205]">
+        {request.popupHint}
+      </p>
+
       <div className="space-y-2">
         <Label htmlFor="fullName">{request.fullNameLabel}</Label>
         <Input
@@ -140,10 +144,18 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
         <Input id="subject" name="subject" placeholder={request.subjectPlaceholder} />
       </div>
 
-      {status === "success" ? (
-        <p className="rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-2 text-sm text-emerald-800" role="status">
-          {request.success}
-        </p>
+      {status === "success" && whatsappUrl ? (
+        <div className="space-y-2 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-sm text-emerald-900" role="status">
+          <p>{request.success}</p>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex font-semibold text-emerald-950 underline underline-offset-4"
+          >
+            {request.openManual}
+          </a>
+        </div>
       ) : null}
 
       <Button
@@ -155,8 +167,11 @@ export function CitizenRequestForm({ compact = false }: { compact?: boolean }) {
         {request.submit}
       </Button>
 
-      <p className="text-xs text-muted-foreground" dir="ltr">
-        WhatsApp: {contact.phoneDisplay}
+      <p className="text-xs text-muted-foreground">
+        رقم واتساب المكتب:{" "}
+        <span dir="ltr" className="unicode-isolate tabular-nums">
+          {contact.phoneDisplay}
+        </span>
       </p>
     </form>
   );

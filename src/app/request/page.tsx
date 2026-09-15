@@ -15,9 +15,11 @@ export default function RequestPage() {
         <div className="space-y-5 rounded-2xl bg-[#111111] p-6 text-white sm:p-8">
           <h2 className="font-heading text-xl font-semibold">كيف يعمل النموذج؟</h2>
           <ol className="space-y-4 text-sm leading-7 text-white/75">
-            <li>1. اكتب اسمك الرباعي بالعربية.</li>
-            <li>2. أدخل رقم واتسابك العراقي.</li>
-            <li>3. اضغط الإرسال لفتح واتساب برسالة جاهزة إلى المكتب.</li>
+            {request.howItWorks.map((step, index) => (
+              <li key={step}>
+                {index + 1}. {step}
+              </li>
+            ))}
           </ol>
           <div className="border-t border-white/15 pt-5 text-sm">
             <p className="text-gold">رقم المكتب على واتساب</p>

@@ -16,9 +16,9 @@ export function RequestPreview() {
           <h2 className="font-heading text-3xl font-bold sm:text-4xl">{request.title}</h2>
           <p className="mt-3 max-w-xl text-lg leading-8 text-white/75">{request.lead}</p>
           <ul className="mt-6 space-y-3 text-sm text-white/70">
-            <li>• أدخل اسمك الرباعي بالعربية</li>
-            <li>• أدخل رقم واتسابك العراقي</li>
-            <li>• تُفتح واتساب برسالة جاهزة إلى المكتب</li>
+            {request.howItWorks.map((step) => (
+              <li key={step}>• {step}</li>
+            ))}
           </ul>
           <Button
             render={<Link href="/request" />}

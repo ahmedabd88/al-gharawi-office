@@ -8,25 +8,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contact } from "@/lib/content";
+import { buildContactWhatsAppMessage, normalizeWhitespace } from "@/lib/validation";
+import { buildWhatsAppUrl, openWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 export function Contact({ standalone = false }: { standalone?: boolean }) {
   const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    const name = String(data.get("name") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
+    const name = normalizeWhitespace(String(data.get("name") ?? ""));
+    const phone = String(data.get("phone") ?? "");
+    const subject = String(data.get("subject") ?? "");
+    const message = normalizeWhitespace(String(data.get("message") ?? ""));
 
     if (!name || !message) {
       setStatus("error");
+      setWhatsappUrl(null);
       return;
     }
 
+    const text = buildContactWhatsAppMessage({ name, phone, subject, message });
+    const url = buildWhatsAppUrl(contact.whatsappE164, text);
+    setWhatsappUrl(url);
     setStatus("success");
-    form.reset();
+    openWhatsAppUrl(url);
   }
 
   return (
@@ -101,6 +110,10 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
             className="space-y-5 rounded-2xl border border-border/80 bg-card p-5 shadow-sm sm:p-6"
             noValidate
           >
+            <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm text-[#1a1205]">
+              {contact.form.hint}
+            </p>
+
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">{contact.form.name}</Label>
@@ -125,13 +138,22 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
                 {contact.form.required}
               </p>
             ) : null}
-            {status === "success" ? (
-              <p className="rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-2 text-sm text-emerald-800" role="status">
-                {contact.form.success}
-              </p>
+            {status === "success" && whatsappUrl ? (
+              <div className="space-y-2 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-sm text-emerald-900" role="status">
+                <p>{contact.form.success}</p>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex font-semibold text-emerald-950 underline underline-offset-4"
+                >
+                  {contact.form.openManual}
+                </a>
+              </div>
             ) : null}
 
             <Button type="submit" size="lg" className="h-11 w-full rounded-md bg-[#111111] text-white hover:bg-black sm:w-auto sm:px-8">
+              <MessageCircle className="size-4" aria-hidden />
               {contact.form.submit}
             </Button>
           </form>

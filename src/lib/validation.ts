@@ -3,6 +3,13 @@
 const ARABIC_NAME_PART =
   /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+$/u;
 
+/** Map Eastern Arabic / Persian digits to Western digits. */
+export function normalizeDigits(value: string): string {
+  return value
+    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+    .replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x06f0));
+}
+
 export function normalizeWhitespace(value: string): string {
   return value.trim().replace(/\s+/g, " ");
 }
@@ -19,9 +26,11 @@ export function validateFourPartArabicName(value: string): string | null {
   return null;
 }
 
-/** Accept 07XXXXXXXXX or +9647XXXXXXXXX / 9647XXXXXXXXX */
+/** Accept 07XXXXXXXXX or +9647XXXXXXXXX / 9647XXXXXXXXX (also Arabic-Indic digits). */
 export function normalizeIraqiWhatsApp(value: string): string | null {
-  const digits = value.replace(/[^\d+]/g, "").replace(/^\+/, "");
+  const digits = normalizeDigits(value)
+    .replace(/[^\d+]/g, "")
+    .replace(/^\+/, "");
   let local = digits;
 
   if (local.startsWith("964")) {
@@ -52,6 +61,24 @@ export function buildCitizenWhatsAppMessage(input: {
   if (input.subject?.trim()) {
     lines.push(`موضوع الطلب: ${normalizeWhitespace(input.subject)}`);
   }
+  lines.push("أرجو المتابعة مشكورين.");
+  return lines.join("\n");
+}
+
+export function buildContactWhatsAppMessage(input: {
+  name: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+}): string {
+  const lines = ["رسالة تواصل عبر موقع المكتب", `الاسم: ${normalizeWhitespace(input.name)}`];
+  if (input.phone?.trim()) {
+    lines.push(`الهاتف: ${normalizeWhitespace(input.phone)}`);
+  }
+  if (input.subject?.trim()) {
+    lines.push(`الموضوع: ${normalizeWhitespace(input.subject)}`);
+  }
+  lines.push(`التفاصيل: ${normalizeWhitespace(input.message)}`);
   lines.push("أرجو المتابعة مشكورين.");
   return lines.join("\n");
 }
