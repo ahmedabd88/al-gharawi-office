@@ -88,6 +88,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
               <p className="text-sm text-gold">قدّم طلباً سريعاً</p>
               <Button
                 render={<Link href="/request" />}
+                nativeButton={false}
                 size="lg"
                 className="mt-3 h-11 rounded-md bg-gold px-5 text-[#1a1205] hover:bg-gold/90"
               >

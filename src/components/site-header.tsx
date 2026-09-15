@@ -51,6 +51,7 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
           })}
           <Button
             render={<Link href="/request" />}
+            nativeButton={false}
             size="lg"
             className="rounded-md bg-gold px-4 text-[#1a1205] hover:bg-gold/90"
           >

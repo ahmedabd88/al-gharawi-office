@@ -22,6 +22,7 @@ export function RequestPreview() {
           </ul>
           <Button
             render={<Link href="/request" />}
+            nativeButton={false}
             size="lg"
             className="mt-8 h-11 rounded-md bg-gold px-6 text-[#1a1205] hover:bg-gold/90"
           >

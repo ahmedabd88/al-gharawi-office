@@ -46,6 +46,7 @@ export function Hero() {
           <div className="animate-rise-delay-2 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
             <Button
               render={<Link href="/request" />}
+              nativeButton={false}
               size="lg"
               className="h-11 rounded-md bg-gold px-6 text-sm text-[#1a1205] hover:bg-gold/90 sm:h-12 sm:px-7 sm:text-base"
             >
@@ -54,6 +55,7 @@ export function Hero() {
             </Button>
             <Button
               render={<a href={`tel:${contact.phoneTel}`} />}
+              nativeButton={false}
               variant="outline"
               size="lg"
               className="h-11 rounded-md border-white/30 bg-transparent px-6 text-sm text-white hover:bg-white/10 hover:text-white sm:h-12 sm:px-7 sm:text-base"
