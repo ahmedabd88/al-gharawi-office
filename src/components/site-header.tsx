@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { nav, office } from "@/lib/content";
+import { nav } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -12,8 +12,8 @@ export function SiteHeader() {
   return (
     <header className="absolute inset-x-0 top-0 z-40">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <a href="#top" className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg">
-          {office.shortBrand}
+        <a href="/" className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg">
+          الرئيسية
         </a>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="القائمة الرئيسية">
