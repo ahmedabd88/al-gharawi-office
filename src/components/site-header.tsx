@@ -12,7 +12,17 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-black/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <a href="/" className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg">
+        <a
+          href="/#top"
+          className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg"
+          onClick={(e) => {
+            if (window.location.pathname === "/") {
+              e.preventDefault();
+              document.getElementById("top")?.scrollIntoView({ behavior: "smooth" });
+              setOpen(false);
+            }
+          }}
+        >
           الرئيسية
         </a>
 
