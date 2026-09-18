@@ -23,7 +23,7 @@ export function SiteHeader() {
             }
           }}
         >
-          الرئيسية
+          الصفحة الرئيسية
         </a>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="القائمة الرئيسية">
