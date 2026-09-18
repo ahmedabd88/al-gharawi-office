@@ -10,8 +10,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-black/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <a href="/" className="font-heading text-base font-semibold text-white drop-shadow sm:text-lg">
           الرئيسية
         </a>
