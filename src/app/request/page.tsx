@@ -7,7 +7,7 @@ import { getSiteContentSnapshot } from "@/lib/site-content-store";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: `قدّم طلباً | ${office.brand}`,
+  title: `تعديل الطلب | ${office.brand}`,
   description: request.lead,
 };
 

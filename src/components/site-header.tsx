@@ -55,7 +55,7 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
             size="lg"
             className="rounded-md bg-gold px-4 text-[#1a1205] hover:bg-gold/90"
           >
-            قدّم طلباً
+            تعديل الطلب
           </Button>
         </nav>
 

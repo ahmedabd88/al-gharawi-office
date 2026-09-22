@@ -38,7 +38,7 @@ export function SiteFooter({ site }: { site: SiteContentSnapshot }) {
               className="inline-flex items-center gap-3 rounded-xl border border-gold/50 bg-gold/10 px-5 py-4 text-lg font-semibold text-gold transition-colors hover:bg-gold hover:text-[#1a1205]"
             >
               <MessageCircle className="size-5" aria-hidden />
-              قدّم طلباً
+              تعديل الطلب
             </Link>
             <a
               href={site.facebookUrl}

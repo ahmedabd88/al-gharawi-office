@@ -96,7 +96,7 @@ export function Contact({
               </a>
             </div>
             <div className="border-b border-white/15 pb-5">
-              <p className="text-sm text-gold">قدّم طلباً سريعاً</p>
+              <p className="text-sm text-gold">تعديل الطلب</p>
               <Button
                 render={<Link href="/request" />}
                 nativeButton={false}

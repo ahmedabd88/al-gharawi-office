@@ -22,7 +22,7 @@ export const office = {
 export const hero = {
   support:
     "متابعة طلبات المواطنين والتنسيق مع الجهات الرسمية لخدمة أهلنا في العراق الحبيب.",
-  primaryCta: "قدّم طلباً عبر واتساب",
+  primaryCta: "تعديل الطلب",
   secondaryCta: "اتصل بالمكتب",
 } as const;
 
@@ -66,12 +66,12 @@ export const services = {
 } as const;
 
 export const request = {
-  title: "قدّم طلبك",
+  title: "تعديل الطلب",
   lead: "أدخل اسمك الرباعي ورقم واتسابك ثم اضغط الإرسال — يُفتح واتساب برسالة جاهزة إلى المكتب، وعليك تأكيد الإرسال من تطبيق واتساب.",
   howItWorks: [
     "اكتب اسمك الرباعي بالعربية (أربعة أسماء).",
     "أدخل رقم واتسابك العراقي (مثل 07701234567).",
-    "اضغط «فتح واتساب لإرسال الطلب» — تُفتح محادثة مع المكتب برسالة جاهزة.",
+    "اضغط «تعديل الطلب» — تُفتح محادثة واتساب مع المكتب برسالة جاهزة.",
     "في واتساب اضغط زر الإرسال لتصل المعاملة إلى المكتب.",
   ],
   fullNameLabel: "الاسم الرباعي",
@@ -82,7 +82,7 @@ export const request = {
   whatsappPlaceholder: "07XXXXXXXXX",
   subjectLabel: "موضوع الطلب (اختياري)",
   subjectPlaceholder: "مثال: متابعة معاملة خدمية",
-  submit: "فتح واتساب لإرسال الطلب",
+  submit: "تعديل الطلب",
   success:
     "تم تجهيز الرسالة. أكمل الإرسال من داخل واتساب بعد فتح المحادثة.",
   successBlocked:
@@ -136,7 +136,7 @@ export const contact = {
 export const nav = [
   { href: "/about", label: "عن المكتب" },
   { href: "/services", label: "الخدمات" },
-  { href: "/request", label: "قدّم طلباً" },
+  { href: "/request", label: "تعديل الطلب" },
   { href: "/contact", label: "تواصل" },
 ] as const;
 
