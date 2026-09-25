@@ -1,78 +1,111 @@
 import type { Metadata } from "next";
-import { BrandViewportShell } from "@/components/brand-viewport-shell";
+import Link from "next/link";
+import {
+  Building2,
+  Calendar,
+  ChartNoAxesCombined,
+  MapPin,
+  MessageCircle,
+  ShieldCheck,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
+import { RecreatePageShell } from "@/components/recreate-page-shell";
 import { about, office } from "@/lib/content";
-import { getSiteContentSnapshot } from "@/lib/site-content-store";
 
 export const metadata: Metadata = {
   title: `عن المكتب | ${office.brand}`,
   description: about.lead,
 };
 
-export const dynamic = "force-dynamic";
+const factIcons: Record<(typeof about.facts)[number]["icon"], LucideIcon> = {
+  building: Building2,
+  map: MapPin,
+  users: Users,
+  calendar: Calendar,
+};
 
-export default async function AboutPage() {
-  const site = await getSiteContentSnapshot();
+const goalIcons: Record<(typeof about.goals)[number]["icon"], LucideIcon> = {
+  shield: ShieldCheck,
+  chat: MessageCircle,
+  chart: ChartNoAxesCombined,
+  community: Users,
+};
 
-  const facts = [
-    { label: "الاسم", value: office.fullName },
-    { label: "الدائرة", value: office.district },
-    { label: "الكتلة", value: office.bloc },
-    { label: "الانتخابات", value: `مجلس النواب ${office.electionYear}` },
-    { label: "الاستقبال", value: site.hours },
-    { label: "الهاتف", value: site.phoneDisplay, href: `tel:${site.phoneTel}` },
-  ];
-
+export default function AboutPage() {
   return (
-    <BrandViewportShell title={about.title} lead={about.lead}>
-      <div className="grid h-full min-h-0 gap-2.5 lg:grid-cols-[1.2fr_0.8fr] lg:gap-3">
-        <div className="flex min-h-0 flex-col justify-start overflow-hidden rounded-xl border border-gold/30 bg-black/45 p-3 sm:rounded-2xl sm:p-4">
-          <p className="text-[10px] font-medium tracking-wide text-gold sm:text-[11px]">
-            {office.mediaOffice}
-          </p>
-          <p className="font-heading mt-0.5 text-base font-bold text-white sm:text-lg">
-            {office.representative}
-          </p>
-          <p className="text-[11px] text-white/55 sm:text-xs">{office.role}</p>
-
-          <div className="mt-2 space-y-1.5 overflow-hidden text-[12px] leading-snug text-white/80 sm:mt-2.5 sm:space-y-2 sm:text-[13px] sm:leading-relaxed">
-            {about.paragraphs.slice(0, 3).map((paragraph) => (
-              <p key={paragraph} className="line-clamp-3 sm:line-clamp-none">
-                {paragraph}
-              </p>
+    <RecreatePageShell title={about.title} lead={about.lead} crumb={about.title}>
+      <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:gap-6">
+        <article className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="font-heading text-xl font-bold text-brand sm:text-2xl">
+            {about.introTitle}
+          </h2>
+          <div className="mt-3 space-y-3 text-sm leading-7 text-foreground/85 sm:text-[0.95rem] sm:leading-8">
+            {about.paragraphs.map((p) => (
+              <p key={p}>{p}</p>
             ))}
           </div>
-
-          <p className="mt-2 shrink-0 rounded-md border border-dashed border-gold/35 bg-gold/5 px-2.5 py-1.5 text-[10px] leading-4 text-gold/85 sm:mt-2.5 sm:text-[11px] sm:leading-5">
+          <p className="mt-4 rounded-lg border border-dashed border-gold/40 bg-gold/5 px-3 py-2 text-xs leading-6 text-stone-warm">
             {about.note}
           </p>
-        </div>
+        </article>
 
-        <aside className="grid min-h-0 grid-cols-2 gap-1.5 content-stretch sm:gap-2 lg:grid-cols-2">
-          {facts.map((fact) => (
-            <div
-              key={fact.label}
-              className="flex min-h-0 flex-col justify-center rounded-lg border border-gold/25 bg-gradient-to-br from-[#15120a] to-[#0a0a0a] px-2.5 py-2 sm:rounded-xl sm:px-3 sm:py-2.5"
-            >
-              <p className="text-[9px] font-medium tracking-wide text-gold/90 sm:text-[10px]">
-                {fact.label}
-              </p>
-              {fact.href ? (
-                <a
-                  href={fact.href}
-                  className="unicode-isolate mt-0.5 block text-[11px] font-semibold text-white hover:text-gold sm:text-xs"
-                  dir="ltr"
-                >
-                  {fact.value}
-                </a>
-              ) : (
-                <p className="mt-0.5 line-clamp-2 text-[11px] font-semibold leading-snug text-white sm:text-xs">
-                  {fact.value}
-                </p>
-              )}
-            </div>
-          ))}
+        <aside className="overflow-hidden rounded-2xl bg-[#111111] text-white shadow-sm">
+          {about.facts.map((fact, i) => {
+            const Icon = factIcons[fact.icon];
+            return (
+              <div
+                key={fact.label}
+                className={`flex items-start gap-3 px-4 py-3.5 sm:px-5 sm:py-4 ${
+                  i > 0 ? "border-t border-white/10" : ""
+                }`}
+              >
+                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-gold/40 text-gold">
+                  <Icon className="size-4" aria-hidden />
+                </span>
+                <div>
+                  <p className="text-[11px] font-medium text-gold">{fact.label}</p>
+                  <p className="mt-0.5 text-sm font-semibold leading-snug">{fact.value}</p>
+                </div>
+              </div>
+            );
+          })}
         </aside>
       </div>
-    </BrandViewportShell>
+
+      <section className="mt-8 sm:mt-10">
+        <h2 className="font-heading text-center text-xl font-bold text-brand sm:text-2xl">
+          {about.goalsTitle}
+        </h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:mt-5 sm:gap-4 lg:grid-cols-4">
+          {about.goals.map((goal) => {
+            const Icon = goalIcons[goal.icon];
+            return (
+              <li
+                key={goal.title}
+                className="flex flex-col items-center rounded-2xl bg-white px-3 py-5 text-center shadow-sm"
+              >
+                <span className="inline-flex size-12 items-center justify-center rounded-full border-2 border-gold text-gold">
+                  <Icon className="size-5" aria-hidden />
+                </span>
+                <p className="font-heading mt-3 text-sm font-bold text-brand sm:text-base">
+                  {goal.title}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      <p className="mt-6 text-center text-sm">
+        <Link href="/contact" className="font-medium text-gold hover:underline">
+          تواصل معنا
+        </Link>
+        <span className="mx-2 text-muted-foreground">·</span>
+        <Link href="/request" className="font-medium text-gold hover:underline">
+          متابعة الطلب
+        </Link>
+      </p>
+    </RecreatePageShell>
   );
 }

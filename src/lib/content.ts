@@ -20,6 +20,9 @@ export const office = {
   parliamentSealSrc: "/images/parliament-seal.png",
   bannerAlt: "بانر مكتب النائب سالم سوادي الغراوي — بغداد، العلم، الشعار، والصورة الرسمية، وخط التيار الوطني الشيعي",
   slogan: "خدمة المواطن .. مسؤوليتنا",
+  currentName: "التيار الوطني الشعبي",
+  fistLogoSrc: "/images/current-fist-logo.png",
+  pageHeroSrc: "/images/page-hero-skyline.png",
 } as const;
 
 /** Mobile homepage quick links (2×2), matching the final mobile reference. */
@@ -59,40 +62,83 @@ export const hero = {
 
 export const about = {
   title: "عن المكتب",
-  lead: "مكتب نيابي يخدم أبناء الوطن ويستقبل طلباتهم بوضوح واحترام.",
+  lead: "مكتب نيابي يخدم أبناء الوطن ويستقبلهم بوضوح واهتمام.",
+  introTitle: "نبذة عن المكتب",
   paragraphs: [
-    `${office.fullName} نائب عراقي عن ${office.district} وفق نتائج انتخابات مجلس النواب لعام ${office.electionYear}.`,
-    office.electionListNote + ".",
-    office.committeeNote + ".",
-    "يعمل المكتب على خدمة أهلنا في العراق الحبيب ومتابعة احتياجات المواطنين بكل عناية.",
+    "يعمل مكتب النائب سالم سوادي الغراوي على خدمة أبناء الوطن واستقبالهم ومتابعة احتياجاتهم ومتطلباتهم لدى الجهات الحكومية المختصة.",
+    "نسعى إلى تعزيز التواصل المباشر مع المواطنين، والاستماع إلى آرائهم ومقترحاتهم، والعمل على معالجة احتياجات المجتمع ضمن الأطر القانونية والدستورية.",
+    `نولي اهتماماً خاصاً بمتابعة المشاريع الخدمية والتنموية في ${office.district}، والتنسيق مع الوزارات والجهات المعنية لخدمة المواطنين.`,
   ],
   note: "تفاصيل السيرة الشخصية الإضافية (الدراسة والمناصب السابقة) بانتظار تزويد المكتب بها.",
+  goalsTitle: "أهداف المكتب",
+  goals: [
+    { title: "الشفافية والنزاهة", icon: "shield" as const },
+    { title: "تعزيز التواصل", icon: "chat" as const },
+    { title: "متابعة المشاريع", icon: "chart" as const },
+    { title: "الخدمة المجتمعية", icon: "community" as const },
+  ],
+  facts: [
+    { label: "الجهة الرسمية", value: "مكتب النائب سالم سوادي الغراوي", icon: "building" as const },
+    { label: "الدائرة الانتخابية", value: office.district, icon: "map" as const },
+    { label: "الكتلة", value: office.bloc, icon: "users" as const },
+    {
+      label: "الدورة النيابية",
+      value: `مجلس النواب العراقي ${office.electionYear}`,
+      icon: "calendar" as const,
+    },
+  ],
 } as const;
 
 export const services = {
   title: "خدمات المكتب",
-  lead: "قنوات واضحة لمساعدة أهلنا في العراق الحبيب على المتابعة وتقديم الطلبات.",
+  lead: "قنوات واضحة لمساعدة أهلنا في متابعة احتياجاتهم وتقديم الطلبات.",
   items: [
     {
       title: "استقبال الطلبات",
       description:
         "تسجيل طلبات المواطنين ومتابعة مسارها داخل المكتب حتى إحالتها للجهة المختصة.",
+      cta: "متابعة الطلب",
+      href: "/request",
+      accent: true,
+      icon: "file" as const,
     },
     {
       title: "المتابعة الخدمية",
       description:
         "التنسيق بشأن المعاملات المتعلقة بالخدمات البلدية والإدارية ضمن صلاحيات المتابعة النيابية.",
+      cta: "عرض التفاصيل",
+      href: "/contact",
+      accent: false,
+      icon: "gear" as const,
     },
     {
       title: "التواصل الرسمي",
       description:
         "إيصال ملاحظات المواطنين إلى الجهات الحكومية المعنية ومتابعة الردود.",
+      cta: "تواصل معنا",
+      href: "/contact",
+      accent: false,
+      icon: "phone" as const,
     },
     {
       title: "الاستفسارات العامة",
       description:
         "توضيح آليات تقديم الطلبات ومواعيد الاستقبال عبر قنوات المكتب المعتمدة.",
+      cta: "طرح استفسار",
+      href: "/contact",
+      accent: false,
+      icon: "chat" as const,
     },
+  ],
+  areasTitle: "مجالات الخدمة",
+  areas: [
+    { title: "الخدمات البلدية", icon: "building" as const },
+    { title: "الخدمات الصحية", icon: "heart" as const },
+    { title: "الخدمات التعليمية", icon: "grad" as const },
+    { title: "الشؤون الاجتماعية", icon: "users" as const },
+    { title: "البنية التحتية", icon: "road" as const },
+    { title: "الرعاية البيئية", icon: "leaf" as const },
+    { title: "المياه والكهرباء", icon: "bolt" as const },
   ],
 } as const;
 

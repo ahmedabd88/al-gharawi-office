@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Contact } from "@/components/contact";
-import { PageShell } from "@/components/page-shell";
+import { ContactRecreate } from "@/components/contact-recreate";
+import { RecreatePageShell } from "@/components/recreate-page-shell";
 import { contact, office } from "@/lib/content";
 import { getSiteContentSnapshot } from "@/lib/site-content-store";
 
@@ -15,10 +15,8 @@ export default async function ContactPage() {
   const site = await getSiteContentSnapshot();
 
   return (
-    <PageShell title={contact.title} lead={site.contactLead} site={site}>
-      <div className="-mx-4 -my-12 sm:-mx-6 sm:-my-16">
-        <Contact standalone site={site} />
-      </div>
-    </PageShell>
+    <RecreatePageShell title={contact.title} lead={site.contactLead} crumb={contact.title}>
+      <ContactRecreate site={site} />
+    </RecreatePageShell>
   );
 }

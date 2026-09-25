@@ -13,9 +13,9 @@ export function MobileHomeChrome() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative z-30 bg-black">
+    <div className="relative z-30 bg-transparent">
       <div
-        className="flex items-center justify-between gap-2 px-3 py-2.5"
+        className="flex items-center justify-between gap-2 bg-gradient-to-b from-black/55 via-black/25 to-transparent px-3 pb-3 pt-2.5"
         dir="ltr"
       >
         <Image

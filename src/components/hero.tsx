@@ -6,10 +6,8 @@ import { office } from "@/lib/content";
 import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
- * Homepage first surface:
- * - Desktop: wide replace artwork with object-contain insets (التيار… visible)
- * - Mobile: dedicated tall replace artwork with contain; chrome + 2×2 cards
- *   (name/slogan are in the mobile art — no duplicate brand band)
+ * Full-bleed homepage hero — object-cover fills 100dvh with no letterbox bars.
+ * object-position keeps portrait, name/slogan, and التيار calligraphy in frame.
  */
 export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
   return (
@@ -17,24 +15,29 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
       {/* —— Desktop —— */}
       <section
         id="top"
-        className="relative hidden min-h-[100dvh] overflow-hidden bg-[#050505] md:block"
+        className="relative hidden h-[100dvh] w-full overflow-hidden bg-black md:block"
         aria-labelledby="hero-brand"
       >
         <h1 id="hero-brand" className="sr-only">
           النائب سالم سوادي الغراوي
         </h1>
 
-        <div className="flex min-h-[100dvh] items-center justify-center px-7 pb-8 pt-20 sm:px-12 sm:pb-10 sm:pt-[5.5rem] lg:px-16 lg:pt-24">
-          <Image
-            src={office.bannerSrc}
-            alt={office.bannerAlt}
-            width={1821}
-            height={864}
-            priority
-            className="h-auto w-auto max-h-[calc(100dvh-8rem)] max-w-[min(90vw,1420px)] object-contain animate-rise"
-            sizes="(max-width: 1280px) 88vw, 1420px"
-          />
-        </div>
+        {/* Explicit absolute fill — guarantees cover of the viewport */}
+        <Image
+          src={office.bannerSrc}
+          alt={office.bannerAlt}
+          fill
+          priority
+          unoptimized
+          className="object-cover"
+          style={{ objectFit: "cover", objectPosition: "46% 40%" }}
+          sizes="100vw"
+        />
+
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-20 bg-gradient-to-b from-black/35 to-transparent"
+          aria-hidden
+        />
 
         <div className="absolute inset-x-0 top-0 z-20 pt-3 sm:pt-4">
           <HeroPillNav floating />
@@ -42,26 +45,25 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
       </section>
 
       {/* —— Mobile —— */}
-      <section
-        className="bg-black md:hidden"
-        aria-labelledby="hero-brand-mobile"
-      >
+      <section className="bg-black md:hidden" aria-labelledby="hero-brand-mobile">
         <h1 id="hero-brand-mobile" className="sr-only">
           النائب سالم سوادي الغراوي — {office.slogan}
         </h1>
 
-        <MobileHomeChrome />
-
-        <div className="relative w-full bg-black px-1.5">
+        <div className="relative h-[100dvh] w-full overflow-hidden">
           <Image
             src={office.mobileBannerSrc}
             alt={office.bannerAlt}
-            width={887}
-            height={1774}
+            fill
             priority
-            className="mx-auto h-auto w-full max-w-full object-contain object-center"
+            unoptimized
+            className="object-cover"
+            style={{ objectFit: "cover", objectPosition: "center 20%" }}
             sizes="100vw"
           />
+          <div className="absolute inset-x-0 top-0 z-20">
+            <MobileHomeChrome />
+          </div>
         </div>
 
         <MobileQuickCards />
