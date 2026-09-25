@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { nav, office } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
+/** Home + page links shown as one RTL command cluster (visual left). */
+const commandNav = [{ href: "/", label: office.shortBrand }, ...nav] as const;
+
 export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "solid" }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -22,19 +25,16 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
           : "absolute inset-x-0 top-0"
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link
-          href="/"
+      <div className="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-4 sm:px-6">
+        {/* RTL: justify-end places this command cluster on the visual left */}
+        <nav
           className={cn(
-            "font-heading text-base font-semibold sm:text-lg",
-            solid ? "text-white" : "text-white drop-shadow"
+            "hidden items-center gap-5 md:flex lg:gap-6",
+            solid ? "text-white/90" : "text-white/90 drop-shadow"
           )}
+          aria-label="القائمة الرئيسية"
         >
-          {office.shortBrand}
-        </Link>
-
-        <nav className="hidden items-center gap-6 md:flex" aria-label="القائمة الرئيسية">
-          {nav.map((item) => {
+          {commandNav.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
@@ -42,7 +42,8 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
                 href={item.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-gold",
-                  active ? "text-gold" : solid ? "text-white/90" : "text-white/90 drop-shadow"
+                  item.href === "/" && "font-heading font-semibold",
+                  active ? "text-gold" : undefined
                 )}
               >
                 {item.label}
@@ -77,11 +78,11 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
         id="mobile-nav"
         className={cn(
           "mx-4 overflow-hidden rounded-xl border border-white/15 bg-black/95 shadow-sm backdrop-blur transition-all duration-300 md:hidden",
-          open ? "mb-3 max-h-80 opacity-100" : "pointer-events-none max-h-0 border-0 opacity-0"
+          open ? "mb-3 max-h-96 opacity-100" : "pointer-events-none max-h-0 border-0 opacity-0"
         )}
       >
         <nav className="flex flex-col gap-1 p-3" aria-label="قائمة الجوال">
-          {nav.map((item) => (
+          {commandNav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
