@@ -7,9 +7,9 @@ import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
  * Homepage first surface:
- * - Desktop: artwork shrinks inside the viewport (contain + generous inset) so
- *   vertical calligraphy (التيار…), name, seal, and slogan stay fully visible.
- * - Mobile: chrome + contained banner + black brand + 2×2 cards
+ * - Desktop: wide replace artwork with object-contain insets (التيار… visible)
+ * - Mobile: dedicated tall replace artwork with contain; chrome + 2×2 cards
+ *   (name/slogan are in the mobile art — no duplicate brand band)
  */
 export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
   return (
@@ -24,7 +24,6 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
           النائب سالم سوادي الغراوي
         </h1>
 
-        {/* Extra top inset clears the floating pill nav; side inset keeps calligraphy in frame */}
         <div className="flex min-h-[100dvh] items-center justify-center px-7 pb-8 pt-20 sm:px-12 sm:pb-10 sm:pt-[5.5rem] lg:px-16 lg:pt-24">
           <Image
             src={office.bannerSrc}
@@ -48,34 +47,21 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
         aria-labelledby="hero-brand-mobile"
       >
         <h1 id="hero-brand-mobile" className="sr-only">
-          النائب سالم سوادي الغراوي
+          النائب سالم سوادي الغراوي — {office.slogan}
         </h1>
 
         <MobileHomeChrome />
 
-        <div className="relative w-full bg-black px-2.5">
+        <div className="relative w-full bg-black px-1.5">
           <Image
             src={office.mobileBannerSrc}
             alt={office.bannerAlt}
-            width={1821}
-            height={864}
+            width={887}
+            height={1774}
             priority
             className="mx-auto h-auto w-full max-w-full object-contain object-center"
             sizes="100vw"
           />
-        </div>
-
-        <div className="bg-black px-4 pb-5 pt-4 text-center">
-          <p className="text-base font-semibold tracking-wide text-white">النائب</p>
-          <p className="font-heading mt-1 text-[1.65rem] font-bold leading-snug text-gold sm:text-3xl">
-            سالم سوادي الغراوي
-          </p>
-          <div className="mx-auto mt-3 flex items-center justify-center gap-2">
-            <span className="h-px w-8 bg-gradient-to-l from-gold/80 to-transparent" aria-hidden />
-            <span className="size-1.5 rotate-45 bg-gold" aria-hidden />
-            <span className="h-px w-8 bg-gradient-to-r from-gold/80 to-transparent" aria-hidden />
-          </div>
-          <p className="mt-2.5 text-sm text-white/90">{office.slogan}</p>
         </div>
 
         <MobileQuickCards />
