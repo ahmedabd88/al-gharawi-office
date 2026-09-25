@@ -7,8 +7,9 @@ import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
  * Homepage first surface:
- * - Desktop (md+): full-bleed final wide banner + interactive RTL pill nav
- * - Mobile: chrome (seal · home pill · menu) + mobile banner + black brand + 2×2 cards
+ * - Desktop: artwork shrinks inside the viewport (contain + generous inset) so
+ *   vertical calligraphy (التيار…), name, seal, and slogan stay fully visible.
+ * - Mobile: chrome + contained banner + black brand + 2×2 cards
  */
 export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
   return (
@@ -23,21 +24,20 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
           النائب سالم سوادي الغراوي
         </h1>
 
-        <Image
-          src={office.bannerSrc}
-          alt={office.bannerAlt}
-          fill
-          priority
-          className="object-cover object-[center_35%] animate-rise lg:object-center"
-          sizes="100vw"
-        />
+        {/* Extra top inset clears the floating pill nav; side inset keeps calligraphy in frame */}
+        <div className="flex min-h-[100dvh] items-center justify-center px-6 pb-8 pt-20 sm:px-10 sm:pb-10 sm:pt-[5.5rem] lg:px-14 lg:pt-24">
+          <Image
+            src={office.bannerSrc}
+            alt={office.bannerAlt}
+            width={1821}
+            height={864}
+            priority
+            className="h-auto w-auto max-h-[calc(100dvh-8rem)] max-w-[min(92vw,1480px)] object-contain animate-rise"
+            sizes="(max-width: 1280px) 90vw, 1480px"
+          />
+        </div>
 
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-28 bg-gradient-to-b from-black/50 via-black/15 to-transparent"
-          aria-hidden
-        />
-
-        <div className="absolute inset-x-0 top-0 z-20 pt-4 sm:pt-5">
+        <div className="absolute inset-x-0 top-0 z-20 pt-3 sm:pt-4">
           <HeroPillNav floating />
         </div>
       </section>
@@ -53,14 +53,14 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
 
         <MobileHomeChrome />
 
-        <div className="relative w-full overflow-hidden">
+        <div className="relative w-full bg-black px-2.5">
           <Image
             src={office.mobileBannerSrc}
             alt={office.bannerAlt}
             width={880}
-            height={775}
+            height={800}
             priority
-            className="h-auto w-full object-cover object-top"
+            className="mx-auto h-auto w-full max-w-full object-contain object-center"
             sizes="100vw"
           />
         </div>
