@@ -143,10 +143,11 @@ export const contact = {
 } as const;
 
 export const nav = [
+  { href: "/", label: "الصفحة الرئيسية" },
   { href: "/about", label: "عن المكتب" },
   { href: "/services", label: "الخدمات" },
   { href: "/request", label: "متابعة الطلب" },
-  { href: "/contact", label: "تواصل" },
+  { href: "/contact", label: "تواصل معنا" },
 ] as const;
 
 export const sources = [
