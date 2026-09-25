@@ -4,9 +4,9 @@ import { office } from "@/lib/content";
 import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
- * First viewport: user reference luxury hero (Baghdad skyline, flag, monument,
- * palms, portrait visual-right, gold seal + name) with interactive RTL pill nav.
- * No black band under the artwork.
+ * First viewport: final reference hero (flag + portrait left, Baghdad skyline,
+ * green fist emblem, gold name النائب سالم سوادي الغراوي, slogan) with
+ * interactive RTL pill nav. No black band under the artwork.
  */
 export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
   return (
@@ -24,11 +24,13 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
         alt={office.bannerAlt}
         fill
         priority
-        className="object-cover object-[80%_42%] animate-rise sm:object-[75%_38%] md:object-[center_32%] lg:object-center"
+        // Portrait is visual-left; name + seal sit center-right. Bias mobile
+        // crop toward the face while keeping the gold name in frame.
+        className="object-cover object-[32%_28%] animate-rise sm:object-[38%_30%] md:object-[center_35%] lg:object-center"
         sizes="100vw"
       />
 
-      {/* Soft shade for pill contrast only — artwork has no mock nav strip */}
+      {/* Soft shade for pill contrast only — mock nav was cropped from the PNG */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-28 bg-gradient-to-b from-black/50 via-black/15 to-transparent"
         aria-hidden
@@ -38,7 +40,7 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
         <HeroPillNav floating />
       </div>
 
-      {/* Narrow phones: keep name readable if crop favors the portrait */}
+      {/* Narrow phones: reinforce name if crop tightens around the portrait */}
       <div
         className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/75 via-black/15 to-transparent px-4 pb-7 pt-24 sm:hidden"
         aria-hidden
@@ -47,6 +49,7 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
           <span className="block text-base font-semibold text-gold/90">النائب</span>
           سالم سوادي الغراوي
         </p>
+        <p className="mt-1 text-sm text-white/85">خدمة المواطن .. مسؤوليتنا</p>
       </div>
     </section>
   );
