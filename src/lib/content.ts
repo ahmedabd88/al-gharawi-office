@@ -16,8 +16,39 @@ export const office = {
   committeeNote:
     "ورد اسمه ضمن أعضاء اللجنة القانونية النيابية في بيان رسمي بتاريخ 30 آذار 2022",
   bannerSrc: "/images/hero-final-baghdad.png",
+  mobileBannerSrc: "/images/hero-final-mobile.png",
+  parliamentSealSrc: "/images/parliament-seal.png",
   bannerAlt: "بانر مكتب النائب سالم سوادي الغراوي — بغداد، العلم، الشعار، والصورة الرسمية",
+  slogan: "خدمة المواطن .. مسؤوليتنا",
 } as const;
+
+/** Mobile homepage quick links (2×2), matching the final mobile reference. */
+export const mobileQuickLinks = [
+  {
+    href: "/request",
+    title: "متابعة الطلب",
+    subtitle: "مؤشرات الطلبات وخدمات المواطنين",
+    icon: "followup" as const,
+  },
+  {
+    href: "/services",
+    title: "الخدمات",
+    subtitle: "جميع الخدمات المتاحة",
+    icon: "services" as const,
+  },
+  {
+    href: "/contact",
+    title: "تواصل معنا",
+    subtitle: "مباشرة مع مكتب النائب",
+    icon: "contact" as const,
+  },
+  {
+    href: "/about",
+    title: "عن المكتب",
+    subtitle: "نبذة عن المكتب وبرامجه",
+    icon: "about" as const,
+  },
+] as const;
 
 export const hero = {
   support:
