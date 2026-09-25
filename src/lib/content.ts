@@ -15,8 +15,8 @@ export const office = {
   electionListNote: "ورد اسمه ضمن قائمة الكتلة الصدرية في نتائج انتخابات 2021",
   committeeNote:
     "ورد اسمه ضمن أعضاء اللجنة القانونية النيابية في بيان رسمي بتاريخ 30 آذار 2022",
-  bannerSrc: "/images/banner-official.jpg",
-  bannerAlt: "بانر المكتب الإعلامي للنائب سالم سوادي الغراوي",
+  bannerSrc: "/images/hero-luxury-baghdad.png",
+  bannerAlt: "بانر مكتب النائب سالم سوادي الغراوي — بغداد، العلم، والصورة الرسمية",
 } as const;
 
 export const hero = {

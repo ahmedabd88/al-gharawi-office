@@ -4,8 +4,8 @@ import { office } from "@/lib/content";
 import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
- * First viewport: official luxury banner (portrait on the visual right,
- * مجلس النواب seal + gold name) with floating RTL pill nav.
+ * First viewport: user reference luxury hero (Baghdad skyline, flag, monument,
+ * palms, portrait visual-right, gold seal + name) with interactive RTL pill nav.
  * No black band under the artwork.
  */
 export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
@@ -24,28 +24,27 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
         alt={office.bannerAlt}
         fill
         priority
-        className="object-cover object-[72%_center] animate-rise sm:object-[68%_center] md:object-center"
+        className="object-cover object-[80%_42%] animate-rise sm:object-[75%_38%] md:object-[center_32%] lg:object-center"
         sizes="100vw"
       />
 
+      {/* Mask the mock nav baked into the artwork; keep interactive pills readable */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-36 bg-gradient-to-b from-black/75 via-black/35 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[4.75rem] bg-gradient-to-b from-black/70 via-black/40 to-transparent sm:h-[5.25rem]"
         aria-hidden
       />
-      <div className="hero-gold-sheen pointer-events-none absolute inset-0 z-[1]" aria-hidden />
 
-      <div className="absolute inset-x-0 top-0 z-20 pt-4 sm:pt-5">
+      <div className="absolute inset-x-0 top-0 z-20 pt-3 sm:pt-4">
         <HeroPillNav floating />
       </div>
 
-      {/* Mobile-only visual title when crop hides the banner typography */}
+      {/* Narrow phones: keep name readable if crop favors the portrait */}
       <div
-        className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-4 pb-8 pt-28 md:hidden"
+        className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/75 via-black/15 to-transparent px-4 pb-7 pt-24 sm:hidden"
         aria-hidden
       >
-        <p className="text-sm tracking-wide text-gold/90">مجلس النواب · المكتب الإعلامي</p>
-        <p className="mt-2 font-heading text-3xl font-bold leading-snug text-gold sm:text-4xl">
-          <span className="block text-xl font-semibold text-gold/90 sm:text-2xl">النائب</span>
+        <p className="font-heading text-2xl font-bold leading-snug text-gold">
+          <span className="block text-base font-semibold text-gold/90">النائب</span>
           سالم سوادي الغراوي
         </p>
       </div>
