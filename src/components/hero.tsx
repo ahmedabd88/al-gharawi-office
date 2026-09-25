@@ -25,15 +25,15 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
         </h1>
 
         {/* Extra top inset clears the floating pill nav; side inset keeps calligraphy in frame */}
-        <div className="flex min-h-[100dvh] items-center justify-center px-6 pb-8 pt-20 sm:px-10 sm:pb-10 sm:pt-[5.5rem] lg:px-14 lg:pt-24">
+        <div className="flex min-h-[100dvh] items-center justify-center px-7 pb-8 pt-20 sm:px-12 sm:pb-10 sm:pt-[5.5rem] lg:px-16 lg:pt-24">
           <Image
             src={office.bannerSrc}
             alt={office.bannerAlt}
             width={1821}
             height={864}
             priority
-            className="h-auto w-auto max-h-[calc(100dvh-8rem)] max-w-[min(92vw,1480px)] object-contain animate-rise"
-            sizes="(max-width: 1280px) 90vw, 1480px"
+            className="h-auto w-auto max-h-[calc(100dvh-8rem)] max-w-[min(90vw,1420px)] object-contain animate-rise"
+            sizes="(max-width: 1280px) 88vw, 1420px"
           />
         </div>
 
@@ -57,8 +57,8 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
           <Image
             src={office.mobileBannerSrc}
             alt={office.bannerAlt}
-            width={880}
-            height={800}
+            width={1821}
+            height={864}
             priority
             className="mx-auto h-auto w-full max-w-full object-contain object-center"
             sizes="100vw"

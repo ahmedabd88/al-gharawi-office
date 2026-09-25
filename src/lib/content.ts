@@ -18,7 +18,7 @@ export const office = {
   bannerSrc: "/images/hero-final-baghdad.png",
   mobileBannerSrc: "/images/hero-final-mobile.png",
   parliamentSealSrc: "/images/parliament-seal.png",
-  bannerAlt: "بانر مكتب النائب سالم سوادي الغراوي — بغداد، العلم، الشعار، والصورة الرسمية",
+  bannerAlt: "بانر مكتب النائب سالم سوادي الغراوي — بغداد، العلم، الشعار، والصورة الرسمية، وخط التيار الوطني الشيعي",
   slogan: "خدمة المواطن .. مسؤوليتنا",
 } as const;
 
