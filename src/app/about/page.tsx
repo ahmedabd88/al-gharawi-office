@@ -35,8 +35,8 @@ const goalIcons: Record<(typeof about.goals)[number]["icon"], LucideIcon> = {
 export default function AboutPage() {
   return (
     <RecreatePageShell title={about.title} lead={about.lead} crumb={about.title}>
-      <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:gap-6">
-        <article className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+      <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:gap-6">
+        <article className="rounded-2xl border border-black/5 bg-white p-5 shadow-[0_8px_28px_rgba(0,0,0,0.06)] sm:p-6">
           <h2 className="font-heading text-xl font-bold text-brand sm:text-2xl">
             {about.introTitle}
           </h2>
@@ -50,7 +50,7 @@ export default function AboutPage() {
           </p>
         </article>
 
-        <aside className="overflow-hidden rounded-2xl bg-[#111111] text-white shadow-sm">
+        <aside className="overflow-hidden rounded-2xl bg-[#111111] text-white shadow-[0_8px_28px_rgba(0,0,0,0.12)]">
           {about.facts.map((fact, i) => {
             const Icon = factIcons[fact.icon];
             return (
@@ -60,8 +60,8 @@ export default function AboutPage() {
                   i > 0 ? "border-t border-white/10" : ""
                 }`}
               >
-                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-gold/40 text-gold">
-                  <Icon className="size-4" aria-hidden />
+                <span className="mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-gold/45 bg-gold/10 text-gold">
+                  <Icon className="size-5" strokeWidth={1.85} aria-hidden />
                 </span>
                 <div>
                   <p className="text-[11px] font-medium text-gold">{fact.label}</p>
@@ -73,20 +73,20 @@ export default function AboutPage() {
         </aside>
       </div>
 
-      <section className="mt-8 sm:mt-10">
+      <section className="mt-9 sm:mt-11">
         <h2 className="font-heading text-center text-xl font-bold text-brand sm:text-2xl">
           {about.goalsTitle}
         </h2>
-        <ul className="mt-4 grid grid-cols-2 gap-3 sm:mt-5 sm:gap-4 lg:grid-cols-4">
+        <ul className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-4 lg:grid-cols-4">
           {about.goals.map((goal) => {
             const Icon = goalIcons[goal.icon];
             return (
               <li
                 key={goal.title}
-                className="flex flex-col items-center rounded-2xl bg-white px-3 py-5 text-center shadow-sm"
+                className="flex flex-col items-center rounded-2xl border border-black/5 bg-white px-3 py-6 text-center shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
               >
-                <span className="inline-flex size-12 items-center justify-center rounded-full border-2 border-gold text-gold">
-                  <Icon className="size-5" aria-hidden />
+                <span className="inline-flex size-14 items-center justify-center rounded-full border-2 border-gold text-gold">
+                  <Icon className="size-6" strokeWidth={1.75} aria-hidden />
                 </span>
                 <p className="font-heading mt-3 text-sm font-bold text-brand sm:text-base">
                   {goal.title}
@@ -97,12 +97,12 @@ export default function AboutPage() {
         </ul>
       </section>
 
-      <p className="mt-6 text-center text-sm">
-        <Link href="/contact" className="font-medium text-gold hover:underline">
+      <p className="mt-7 text-center text-sm">
+        <Link href="/contact" className="font-semibold text-gold hover:underline">
           تواصل معنا
         </Link>
         <span className="mx-2 text-muted-foreground">·</span>
-        <Link href="/request" className="font-medium text-gold hover:underline">
+        <Link href="/request" className="font-semibold text-gold hover:underline">
           متابعة الطلب
         </Link>
       </p>

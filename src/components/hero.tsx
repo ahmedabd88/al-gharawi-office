@@ -6,8 +6,8 @@ import { office } from "@/lib/content";
 import type { SiteContentSnapshot } from "@/lib/site-content";
 
 /**
- * Full-bleed homepage hero — object-cover fills 100dvh with no letterbox bars.
- * object-position keeps portrait, name/slogan, and التيار calligraphy in frame.
+ * Homepage hero at the artwork’s natural aspect (~1588×991).
+ * Full width, no forced 100dvh letterboxing — nav overlays the banner.
  */
 export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
   return (
@@ -15,27 +15,26 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
       {/* —— Desktop —— */}
       <section
         id="top"
-        className="relative hidden h-[100dvh] w-full overflow-hidden bg-black md:block"
+        className="relative hidden w-full overflow-hidden bg-black md:block"
         aria-labelledby="hero-brand"
       >
         <h1 id="hero-brand" className="sr-only">
           النائب سالم سوادي الغراوي
         </h1>
 
-        {/* Explicit absolute fill — guarantees cover of the viewport */}
         <Image
           src={office.bannerSrc}
           alt={office.bannerAlt}
-          fill
+          width={1588}
+          height={991}
           priority
           unoptimized
-          className="object-cover"
-          style={{ objectFit: "cover", objectPosition: "46% 40%" }}
+          className="h-auto w-full"
           sizes="100vw"
         />
 
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-20 bg-gradient-to-b from-black/35 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-24 bg-gradient-to-b from-black/40 to-transparent"
           aria-hidden
         />
 
@@ -50,15 +49,15 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
           النائب سالم سوادي الغراوي — {office.slogan}
         </h1>
 
-        <div className="relative h-[100dvh] w-full overflow-hidden">
+        <div className="relative w-full overflow-hidden">
           <Image
             src={office.mobileBannerSrc}
             alt={office.bannerAlt}
-            fill
+            width={887}
+            height={1774}
             priority
             unoptimized
-            className="object-cover"
-            style={{ objectFit: "cover", objectPosition: "center 20%" }}
+            className="h-auto w-full"
             sizes="100vw"
           />
           <div className="absolute inset-x-0 top-0 z-20">

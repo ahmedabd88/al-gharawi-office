@@ -49,10 +49,10 @@ export default function ServicesPage() {
           return (
             <li
               key={item.title}
-              className="flex flex-col rounded-2xl bg-white p-4 shadow-sm sm:p-5"
+              className="group flex flex-col rounded-2xl border border-black/5 bg-white p-4 shadow-[0_8px_28px_rgba(0,0,0,0.06)] sm:p-5"
             >
-              <span className="inline-flex size-10 items-center justify-center rounded-md bg-gold text-[#1a1205]">
-                <Icon className="size-5" aria-hidden />
+              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-gradient-to-br from-[#e8c547] to-[#c9a227] text-[#1a1205] shadow-sm">
+                <Icon className="size-5" strokeWidth={2.25} aria-hidden />
               </span>
               <h2 className="font-heading mt-3 text-lg font-bold text-brand">{item.title}</h2>
               <p className="mt-1.5 flex-1 text-sm leading-7 text-muted-foreground">
@@ -63,8 +63,8 @@ export default function ServicesPage() {
                 className={cn(
                   "mt-4 inline-flex min-h-10 items-center justify-center rounded-full px-4 text-sm font-semibold transition-colors",
                   item.accent
-                    ? "bg-gold text-[#1a1205] hover:bg-[#d4af37]"
-                    : "bg-[#f3ead2] text-[#1a1205] hover:bg-gold/40"
+                    ? "bg-gradient-to-l from-[#c9a227] to-[#e8c547] text-[#1a1205] shadow-sm hover:brightness-105"
+                    : "bg-[#f3ead2] text-[#1a1205] hover:bg-gold/35"
                 )}
               >
                 {item.cta}
@@ -74,19 +74,22 @@ export default function ServicesPage() {
         })}
       </ul>
 
-      <section className="mt-8 sm:mt-10">
+      <section className="mt-9 sm:mt-11">
         <h2 className="font-heading text-center text-xl font-bold text-brand sm:text-2xl">
           {services.areasTitle}
         </h2>
-        <ul className="mt-5 flex flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:gap-x-6">
+        <ul className="mt-6 flex flex-wrap items-start justify-center gap-x-5 gap-y-6 sm:gap-x-7">
           {services.areas.map((area) => {
             const Icon = areaIcons[area.icon];
             return (
-              <li key={area.title} className="flex w-[4.75rem] flex-col items-center text-center sm:w-24">
-                <span className="inline-flex size-14 items-center justify-center rounded-full bg-white text-brand shadow-md sm:size-16">
-                  <Icon className="size-6" aria-hidden />
+              <li
+                key={area.title}
+                className="flex w-[5rem] flex-col items-center text-center sm:w-24"
+              >
+                <span className="inline-flex size-14 items-center justify-center rounded-full border border-gold/30 bg-white text-gold shadow-[0_6px_18px_rgba(0,0,0,0.08)] sm:size-16">
+                  <Icon className="size-6" strokeWidth={1.75} aria-hidden />
                 </span>
-                <p className="mt-2 text-[11px] font-medium leading-snug text-brand sm:text-xs">
+                <p className="mt-2.5 text-[11px] font-semibold leading-snug text-brand sm:text-xs">
                   {area.title}
                 </p>
               </li>

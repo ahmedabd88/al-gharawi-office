@@ -22,7 +22,7 @@ export const office = {
   slogan: "خدمة المواطن .. مسؤوليتنا",
   currentName: "التيار الوطني الشعبي",
   fistLogoSrc: "/images/current-fist-logo.png",
-  pageHeroSrc: "/images/page-hero-skyline.png",
+  pageHeroSrc: "/images/page-hero-inner.png",
 } as const;
 
 /** Mobile homepage quick links (2×2), matching the final mobile reference. */
