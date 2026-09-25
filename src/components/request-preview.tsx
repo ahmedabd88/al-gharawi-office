@@ -28,7 +28,7 @@ export function RequestPreview({ site }: { site: SiteContentSnapshot }) {
             className="mt-8 h-11 rounded-md bg-gold px-6 text-[#1a1205] hover:bg-gold/90"
           >
             <MessageCircle className="size-4" aria-hidden />
-            صفحة تعديل الطلب
+            صفحة متابعة الطلب
           </Button>
         </div>
 

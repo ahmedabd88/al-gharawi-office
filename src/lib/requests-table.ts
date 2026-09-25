@@ -2,10 +2,20 @@
 
 export const REQUESTS_STORAGE_KEY = "citizen-requests";
 
+export type CitizenRequestStatus =
+  | "جديدة"
+  | "قيد المتابعة"
+  | "تم استلام الرد"
+  | "مكتملة"
+  | "ملغاة";
+
 export type CitizenRequestRecord = {
   fullName: string;
   whatsapp: string;
   subject?: string | null;
+  status?: CitizenRequestStatus;
+  /** Optional office reference shown on follow-up */
+  ref?: string | null;
   at: string;
 };
 
@@ -43,7 +53,7 @@ export const requestsTableCopy = {
   refresh: "تحديث من الطلبات المحفوظة",
   clearCitizen: "مسح الطلبات المحفوظة على هذا الجهاز",
   citizenNote:
-    "الطلبات الواردة من صفحة «تعديل الطلب» تُحفظ على الخادم وتظهر هنا بعد دخول المكتب لطباعتها رسمياً.",
+    "الطلبات تُسجَّل من لوحة المكتب فقط. المواطن يتابع حالته عبر صفحة «متابعة الطلب» بالاسم ورقم الواتساب.",
   printHint: "استخدم الطباعة الأفقية (Landscape) للحصول على أفضل مواءمة للأعمدة.",
   docsPanelTitle: "قائمة الوثائق",
   hideDocsPanel: "إخفاء القائمة",

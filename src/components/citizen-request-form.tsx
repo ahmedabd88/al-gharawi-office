@@ -1,40 +1,57 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { WhatsAppOpenLink } from "@/components/whatsapp-open-link";
 import { contact, request } from "@/lib/content";
 import {
-  buildCitizenWhatsAppMessage,
   normalizeIraqiWhatsApp,
   normalizeWhitespace,
   validateFourPartArabicName,
 } from "@/lib/validation";
-import { buildWhatsAppUrl, openWhatsAppUrl, type WhatsAppOpenResult } from "@/lib/whatsapp";
 
 type FieldErrors = {
   fullName?: string;
   whatsapp?: string;
 };
 
+type FollowUpResult = {
+  fullName: string;
+  whatsapp: string;
+  subject?: string | null;
+  status: string;
+  ref?: string | null;
+  at: string;
+};
+
 const errorMap = request.errors;
+
+function formatDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+  } catch {
+    return iso;
+  }
+}
 
 export function CitizenRequestForm({
   compact = false,
   phoneDisplay = contact.phoneDisplay,
-  whatsappE164 = contact.whatsappE164,
 }: {
   compact?: boolean;
   phoneDisplay?: string;
+  /** Kept for callers; unused — public flow no longer opens WhatsApp. */
   whatsappE164?: string;
 }) {
-  const [status, setStatus] = useState<"idle" | "error" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "error" | "found" | "empty">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
-  const [openResult, setOpenResult] = useState<WhatsAppOpenResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [lookupError, setLookupError] = useState<string | null>(null);
+  const [result, setResult] = useState<FollowUpResult | null>(null);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,7 +59,6 @@ export function CitizenRequestForm({
     const data = new FormData(form);
     const fullName = normalizeWhitespace(String(data.get("fullName") ?? ""));
     const whatsappRaw = String(data.get("whatsapp") ?? "");
-    const subject = String(data.get("subject") ?? "");
 
     const nextErrors: FieldErrors = {};
     const nameError = validateFourPartArabicName(fullName);
@@ -58,44 +74,55 @@ export function CitizenRequestForm({
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       setStatus("error");
-      setWhatsappUrl(null);
-      setOpenResult(null);
+      setResult(null);
+      setLookupError(null);
       return;
     }
 
     setErrors({});
+    setLookupError(null);
+    setLoading(true);
+    setResult(null);
 
-    const message = buildCitizenWhatsAppMessage({
-      fullName,
-      whatsapp: normalizedWhatsapp!,
-      subject,
-    });
-    const url = buildWhatsAppUrl(whatsappE164, message);
-
-    // Server-side store (write-only for citizens) — office reads via private login.
     try {
-      await fetch("/api/citizen-requests", {
+      const res = await fetch("/api/citizen-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName,
           whatsapp: normalizedWhatsapp,
-          subject: normalizeWhitespace(subject) || null,
         }),
       });
+      const dataJson = (await res.json()) as {
+        ok?: boolean;
+        found?: boolean;
+        message?: string;
+        error?: string;
+        request?: FollowUpResult;
+      };
+      if (!res.ok || !dataJson.ok) {
+        setLookupError(dataJson.error || errorMap.lookup);
+        setStatus("error");
+        return;
+      }
+      if (!dataJson.found || !dataJson.request) {
+        setStatus("empty");
+        setResult(null);
+        return;
+      }
+      setResult(dataJson.request);
+      setStatus("found");
     } catch {
-      // WhatsApp open should still proceed even if store write fails.
+      setLookupError(errorMap.lookup);
+      setStatus("error");
+    } finally {
+      setLoading(false);
     }
-
-    setWhatsappUrl(url);
-    setStatus("success");
-    const result = openWhatsAppUrl(url);
-    setOpenResult(result);
   }
 
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={(e) => void onSubmit(e)}
       className={
         compact
           ? "space-y-4"
@@ -106,10 +133,6 @@ export function CitizenRequestForm({
       <p className="rounded-md border border-gold/30 bg-gold/10 px-3 py-2 text-sm leading-7 text-[#1a1205]">
         {request.popupHint}
       </p>
-      <ul className="space-y-1 text-xs leading-6 text-muted-foreground">
-        <li>• {request.deviceTips.mobile}</li>
-        <li>• {request.deviceTips.desktop}</li>
-      </ul>
 
       <div className="space-y-2">
         <Label htmlFor="fullName">{request.fullNameLabel}</Label>
@@ -158,39 +181,70 @@ export function CitizenRequestForm({
         ) : null}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="subject">{request.subjectLabel}</Label>
-        <Input
-          id="subject"
-          name="subject"
-          placeholder={request.subjectPlaceholder}
-          className="min-h-11 text-base md:text-sm"
-        />
-      </div>
+      {lookupError ? (
+        <p
+          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          role="alert"
+        >
+          {lookupError}
+        </p>
+      ) : null}
 
-      {status === "success" && whatsappUrl ? (
+      {status === "empty" ? (
+        <div
+          className="rounded-md border border-amber-200 bg-amber-50 px-3 py-3 text-amber-950"
+          role="status"
+        >
+          <p className="text-sm font-semibold leading-7">{request.empty}</p>
+          <p className="mt-1 text-sm leading-7 text-amber-900/80">{request.emptyHint}</p>
+        </div>
+      ) : null}
+
+      {status === "found" && result ? (
         <div
           className="space-y-3 rounded-md border border-emerald-700/30 bg-emerald-50 px-3 py-3 text-emerald-950"
           role="status"
         >
-          <p className="text-sm leading-7">
-            {openResult === "blocked" ? request.successBlocked : request.success}
-          </p>
-          <WhatsAppOpenLink href={whatsappUrl} label={request.openManual} />
+          <p className="text-sm font-semibold">{request.foundTitle}</p>
+          <dl className="space-y-2 text-sm leading-7">
+            <div className="flex flex-wrap gap-2">
+              <dt className="font-medium">{request.statusLabel}:</dt>
+              <dd className="rounded-md bg-white/80 px-2 py-0.5 font-semibold ring-1 ring-emerald-200">
+                {result.status}
+              </dd>
+            </div>
+            {result.ref ? (
+              <div className="flex flex-wrap gap-2">
+                <dt className="font-medium">{request.refLabel}:</dt>
+                <dd dir="ltr">{result.ref}</dd>
+              </div>
+            ) : null}
+            {result.subject ? (
+              <div className="flex flex-wrap gap-2">
+                <dt className="font-medium">{request.subjectResultLabel}:</dt>
+                <dd>{result.subject}</dd>
+              </div>
+            ) : null}
+            <div className="flex flex-wrap gap-2">
+              <dt className="font-medium">{request.dateLabel}:</dt>
+              <dd dir="ltr">{formatDate(result.at)}</dd>
+            </div>
+          </dl>
         </div>
       ) : null}
 
       <Button
         type="submit"
         size="lg"
+        disabled={loading}
         className="h-12 w-full rounded-md bg-[#111111] text-base text-white hover:bg-black sm:w-auto sm:px-8"
       >
-        <MessageCircle className="size-4" aria-hidden />
-        {request.submit}
+        <Search className="size-4" aria-hidden />
+        {loading ? request.searching : request.submit}
       </Button>
 
       <p className="text-xs text-muted-foreground">
-        رقم واتساب المكتب:{" "}
+        للاستفسار عن المكتب:{" "}
         <span dir="ltr" className="unicode-isolate tabular-nums">
           {phoneDisplay}
         </span>

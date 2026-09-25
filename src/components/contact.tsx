@@ -96,7 +96,7 @@ export function Contact({
               </a>
             </div>
             <div className="border-b border-white/15 pb-5">
-              <p className="text-sm text-gold">تعديل الطلب</p>
+              <p className="text-sm text-gold">متابعة الطلب</p>
               <Button
                 render={<Link href="/request" />}
                 nativeButton={false}
@@ -104,7 +104,7 @@ export function Contact({
                 className="mt-3 h-11 rounded-md bg-gold px-5 text-[#1a1205] hover:bg-gold/90"
               >
                 <MessageCircle className="size-4" aria-hidden />
-                نموذج الاسم الرباعي وواتساب
+                الاستعلام عن حالة الطلب
               </Button>
             </div>
             <div className="border-b border-white/15 pb-5">

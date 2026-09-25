@@ -38,7 +38,7 @@ export const editableSiteDefaults: EditableSiteContent = {
 
 export const siteContentFieldLabels: Record<keyof EditableSiteContent, string> = {
   heroSupport: "نص الترحيب تحت اسم المكتب (الرئيسية)",
-  heroPrimaryCta: "نص زر تعديل الطلب",
+  heroPrimaryCta: "نص زر متابعة الطلب",
   contactLead: "مقدمة صفحة التواصل",
   phoneDisplay: "رقم الهاتف / واتساب (مثل 07762084894)",
   hours: "أوقات الاستقبال",

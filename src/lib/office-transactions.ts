@@ -120,18 +120,32 @@ export const sampleTransactions: OfficeTransaction[] = [
 ];
 
 export function citizenToTransaction(
-  record: { fullName: string; whatsapp: string; subject?: string | null; at: string; id?: string },
+  record: {
+    fullName: string;
+    whatsapp: string;
+    subject?: string | null;
+    status?: string;
+    at: string;
+    id?: string;
+  },
   index: number
 ): OfficeTransaction {
   const created = record.at ? new Date(record.at) : new Date();
   const safe = Number.isNaN(created.getTime()) ? new Date() : created;
   const date = `${safe.getDate()}/${safe.getMonth() + 1}/${safe.getFullYear()}`;
+  const statusMap: Record<string, TransactionStatus> = {
+    جديدة: "جديدة",
+    "قيد المتابعة": "تم استلام الرد",
+    "تم استلام الرد": "تم استلام الرد",
+    مكتملة: "مكتملة",
+    ملغاة: "ملغاة",
+  };
   return {
     id: record.id ?? `citizen-tx-${index}`,
     number: `م-${String(100 + index).padStart(3, "0")}`,
     title: record.subject?.trim() || `طلب مواطن — ${record.fullName}`,
-    authority: "مواطن عبر واتساب",
-    status: "جديدة",
+    authority: "مواطن عبر المكتب",
+    status: statusMap[record.status ?? ""] ?? "جديدة",
     date,
     tab: "transactions",
   };

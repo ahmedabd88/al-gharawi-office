@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { appendOfficeRequest } from "@/lib/office-store";
+import { findOfficeRequest } from "@/lib/office-store";
 import {
   normalizeIraqiWhatsApp,
   normalizeWhitespace,
@@ -9,11 +9,11 @@ import {
 export const runtime = "nodejs";
 
 /**
- * Public write-only endpoint used by the citizen WhatsApp form.
- * Does not expose stored requests to anonymous readers.
+ * Public follow-up lookup only.
+ * Does not create requests. Does not list all stored items.
  */
 export async function POST(request: Request) {
-  let body: { fullName?: string; whatsapp?: string; subject?: string };
+  let body: { fullName?: string; whatsapp?: string };
   try {
     body = (await request.json()) as typeof body;
   } catch {
@@ -22,7 +22,6 @@ export async function POST(request: Request) {
 
   const fullName = normalizeWhitespace(String(body.fullName ?? ""));
   const whatsappRaw = String(body.whatsapp ?? "");
-  const subject = String(body.subject ?? "");
 
   if (validateFourPartArabicName(fullName)) {
     return NextResponse.json({ ok: false, error: "الاسم الرباعي غير صالح" }, { status: 400 });
@@ -32,11 +31,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "رقم الواتساب غير صالح" }, { status: 400 });
   }
 
-  const entry = await appendOfficeRequest({
-    fullName,
-    whatsapp,
-    subject: normalizeWhitespace(subject) || null,
-  });
+  const match = await findOfficeRequest({ fullName, whatsapp });
+  if (!match) {
+    return NextResponse.json({
+      ok: true,
+      found: false,
+      message: "لا يوجد طلب مسجل بهذا الاسم/الرقم",
+    });
+  }
 
-  return NextResponse.json({ ok: true, id: entry.id });
+  return NextResponse.json({
+    ok: true,
+    found: true,
+    request: {
+      fullName: match.fullName,
+      whatsapp: match.whatsapp,
+      subject: match.subject,
+      status: match.status,
+      ref: match.ref,
+      at: match.at,
+    },
+  });
 }

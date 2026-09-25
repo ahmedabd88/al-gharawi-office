@@ -3,10 +3,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { getEncryptionKey } from "@/lib/office-auth";
-import type { CitizenRequestRecord } from "@/lib/requests-table";
+import type { CitizenRequestRecord, CitizenRequestStatus } from "@/lib/requests-table";
+import { normalizeIraqiWhatsApp, normalizeWhitespace } from "@/lib/validation";
 
 export type StoredCitizenRequest = CitizenRequestRecord & {
   id: string;
+  status: CitizenRequestStatus;
 };
 
 type StoreFile = {
@@ -16,6 +18,7 @@ type StoreFile = {
 };
 
 const MEMORY_KEY = "__al_gharawi_office_requests__";
+const DEFAULT_STATUS: CitizenRequestStatus = "قيد المتابعة";
 
 type GlobalStore = typeof globalThis & {
   [MEMORY_KEY]?: StoreFile;
@@ -27,6 +30,19 @@ function memoryStore(): StoreFile {
     g[MEMORY_KEY] = { version: 1, updatedAt: new Date().toISOString(), items: [] };
   }
   return g[MEMORY_KEY]!;
+}
+
+function normalizeNameKey(value: string): string {
+  return normalizeWhitespace(value).replace(/\s+/g, " ");
+}
+
+function normalizeStoredItem(item: StoredCitizenRequest): StoredCitizenRequest {
+  return {
+    ...item,
+    status: item.status ?? DEFAULT_STATUS,
+    ref: item.ref ?? null,
+    subject: item.subject ?? null,
+  };
 }
 
 function candidatePaths(): string[] {
@@ -94,28 +110,52 @@ async function writeToDisk(data: StoreFile): Promise<boolean> {
 export async function listOfficeRequests(): Promise<StoredCitizenRequest[]> {
   const fromDisk = await readFromDisk();
   if (fromDisk) {
-    memoryStore().items = fromDisk.items;
+    const items = fromDisk.items.map(normalizeStoredItem);
+    memoryStore().items = items;
     memoryStore().updatedAt = fromDisk.updatedAt;
-    return [...fromDisk.items];
+    return [...items];
   }
-  return [...memoryStore().items];
+  return memoryStore().items.map(normalizeStoredItem);
+}
+
+/** Public follow-up lookup — returns one match or null; never creates. */
+export async function findOfficeRequest(input: {
+  fullName: string;
+  whatsapp: string;
+}): Promise<StoredCitizenRequest | null> {
+  const nameKey = normalizeNameKey(input.fullName);
+  const phone = normalizeIraqiWhatsApp(input.whatsapp) ?? input.whatsapp;
+  const items = await listOfficeRequests();
+  return (
+    items.find(
+      (row) =>
+        normalizeNameKey(row.fullName) === nameKey &&
+        (normalizeIraqiWhatsApp(row.whatsapp) ?? row.whatsapp) === phone
+    ) ?? null
+  );
 }
 
 export async function appendOfficeRequest(
-  input: Omit<CitizenRequestRecord, "at"> & { at?: string }
+  input: Omit<CitizenRequestRecord, "at"> & {
+    at?: string;
+    status?: CitizenRequestStatus;
+    ref?: string | null;
+  }
 ): Promise<StoredCitizenRequest> {
   const current = (await readFromDisk()) ?? memoryStore();
   const entry: StoredCitizenRequest = {
     id: randomBytes(8).toString("hex"),
-    fullName: input.fullName,
-    whatsapp: input.whatsapp,
+    fullName: normalizeWhitespace(input.fullName),
+    whatsapp: normalizeIraqiWhatsApp(input.whatsapp) ?? input.whatsapp,
     subject: input.subject ?? null,
+    status: input.status ?? DEFAULT_STATUS,
+    ref: input.ref?.trim() || null,
     at: input.at ?? new Date().toISOString(),
   };
   const next: StoreFile = {
     version: 1,
     updatedAt: new Date().toISOString(),
-    items: [entry, ...current.items].slice(0, 500),
+    items: [entry, ...current.items.map(normalizeStoredItem)].slice(0, 500),
   };
   memoryStore().items = next.items;
   memoryStore().updatedAt = next.updatedAt;

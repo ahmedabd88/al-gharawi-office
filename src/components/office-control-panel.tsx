@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { OfficeTransactionsPanel } from "@/components/office-transactions-panel";
+import { OfficeRegisterRequestForm } from "@/components/office-register-request-form";
 import {
   editableSiteDefaults,
   siteContentFieldLabels,
@@ -340,7 +341,9 @@ export function OfficeControlPanel() {
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#222]/10 bg-white px-4 py-3 shadow-sm">
               <div>
                 <h2 className="font-heading text-xl font-bold">الطلبات والمعاملات</h2>
-                <p className="mt-1 text-sm text-[#666]">عرض الطلبات الواردة من صفحة المواطن.</p>
+                <p className="mt-1 text-sm text-[#666]">
+                  سجّل الطلبات هنا فقط — الموقع العام يعرض المتابعة دون إنشاء طلب جديد.
+                </p>
               </div>
               <Button
                 type="button"
@@ -353,6 +356,12 @@ export function OfficeControlPanel() {
                 تحديث
               </Button>
             </div>
+
+            <OfficeRegisterRequestForm
+              onRegistered={() => loadRequests()}
+              onUnauthorized={() => router.replace("/office-login?next=/office?section=requests")}
+            />
+
             {requestsLoading ? <p className="text-sm text-[#555]">جاري تحميل الطلبات…</p> : null}
             {requestsError ? (
               <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
