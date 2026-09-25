@@ -28,13 +28,13 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
         sizes="100vw"
       />
 
-      {/* Mask the mock nav baked into the artwork; keep interactive pills readable */}
+      {/* Soft shade for pill contrast only — artwork has no mock nav strip */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[4.75rem] bg-gradient-to-b from-black/70 via-black/40 to-transparent sm:h-[5.25rem]"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-28 bg-gradient-to-b from-black/50 via-black/15 to-transparent"
         aria-hidden
       />
 
-      <div className="absolute inset-x-0 top-0 z-20 pt-3 sm:pt-4">
+      <div className="absolute inset-x-0 top-0 z-20 pt-4 sm:pt-5">
         <HeroPillNav floating />
       </div>
 
