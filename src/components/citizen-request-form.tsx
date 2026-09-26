@@ -103,6 +103,8 @@ export function CitizenRequestForm({
       return;
     }
 
+    if (!normalizedWhatsapp) return;
+
     setErrors({});
     setLookupError(null);
     setLoading(true);
