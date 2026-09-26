@@ -113,7 +113,22 @@ export function Contact({
             </div>
             <div>
               <p className="text-sm text-gold">{site.addressLabel}</p>
-              <p className="mt-2 text-lg text-white/90">{site.address}</p>
+              <a
+                href={site.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block text-lg text-white/90 hover:text-gold hover:underline"
+              >
+                {site.address}
+              </a>
+              <a
+                href={site.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-2 rounded-md border border-gold/40 bg-gold/10 px-3 py-2 text-sm font-semibold text-gold hover:bg-gold hover:text-[#1a1205]"
+              >
+                {site.mapsLabel}
+              </a>
             </div>
           </div>
 

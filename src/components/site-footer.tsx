@@ -20,7 +20,14 @@ export function SiteFooter({ site }: { site: SiteContentSnapshot }) {
             <MapPin className="mt-1 size-5 shrink-0 text-gold" aria-hidden />
             <span>
               <span className="text-gold">{site.addressLabel}: </span>
-              {site.address}
+              <a
+                href={site.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-offset-4 hover:text-gold hover:underline"
+              >
+                {site.address}
+              </a>
             </span>
           </p>
 

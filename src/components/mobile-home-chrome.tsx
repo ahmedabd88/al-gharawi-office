@@ -15,17 +15,20 @@ export function MobileHomeChrome() {
   return (
     <div className="relative z-30 bg-transparent">
       <div
-        className="flex items-center justify-between gap-2 bg-gradient-to-b from-black/55 via-black/25 to-transparent px-3 pb-3 pt-2.5"
+        className="flex items-center justify-between gap-2 bg-gradient-to-b from-black/55 via-black/25 to-transparent px-3.5 pb-3 pt-3"
         dir="ltr"
       >
-        <Image
-          src={office.parliamentSealSrc}
-          alt="مجلس النواب العراقي"
-          width={52}
-          height={52}
-          className="size-12 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(201,162,39,0.35)]"
-          priority
-        />
+        <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#111] p-[3px] shadow-[0_0_14px_rgba(201,162,39,0.45)] ring-1 ring-gold/60">
+          <Image
+            src={office.parliamentSealSrc}
+            alt="مجلس النواب العراقي"
+            width={112}
+            height={112}
+            className="size-full rounded-full object-contain"
+            sizes="56px"
+            priority
+          />
+        </div>
 
         <Link
           href="/"
@@ -38,13 +41,17 @@ export function MobileHomeChrome() {
 
         <button
           type="button"
-          className="inline-flex size-11 items-center justify-center rounded-lg text-gold transition-colors hover:bg-white/10"
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border-2 border-gold bg-black/80 text-gold shadow-[0_0_16px_rgba(201,162,39,0.45)] transition-colors hover:bg-gold hover:text-[#1a1205]"
           aria-expanded={open}
           aria-controls="mobile-home-menu"
           aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X className="size-7" strokeWidth={2.25} /> : <Menu className="size-7" strokeWidth={2.25} />}
+          {open ? (
+            <X className="size-7" strokeWidth={2.5} aria-hidden />
+          ) : (
+            <Menu className="size-7" strokeWidth={2.5} aria-hidden />
+          )}
         </button>
       </div>
 

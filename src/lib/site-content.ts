@@ -23,6 +23,9 @@ export type SiteContentSnapshot = EditableSiteContent & {
   phoneRaw: string;
   whatsappE164: string;
   addressLabel: string;
+  mapsUrl: string;
+  mapsLabel: string;
+  mapsHint: string;
 };
 
 export const editableSiteDefaults: EditableSiteContent = {
@@ -94,6 +97,9 @@ export function toSiteContentSnapshot(
     ...editable,
     ...phones,
     addressLabel: contact.addressLabel,
+    mapsUrl: contact.mapsUrl,
+    mapsLabel: contact.mapsLabel,
+    mapsHint: contact.mapsHint,
     updatedAt,
   };
 }

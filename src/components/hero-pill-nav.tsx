@@ -72,13 +72,17 @@ export function HeroPillNav({ floating = false }: { floating?: boolean }) {
             type="button"
             variant="outline"
             size="icon"
-            className="border-gold/40 bg-black/50 text-white hover:bg-white/10 hover:text-gold"
+            className="size-12 shrink-0 rounded-xl border-2 border-gold bg-black/80 text-gold shadow-[0_0_16px_rgba(201,162,39,0.45)] hover:bg-gold hover:text-[#1a1205]"
             aria-expanded={open}
             aria-controls="hero-mobile-nav"
             aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X /> : <Menu />}
+            {open ? (
+              <X className="size-7" strokeWidth={2.5} aria-hidden />
+            ) : (
+              <Menu className="size-7" strokeWidth={2.5} aria-hidden />
+            )}
           </Button>
         </div>
       </div>

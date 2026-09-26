@@ -49,7 +49,7 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
           النائب سالم سوادي الغراوي — {office.slogan}
         </h1>
 
-        <div className="relative w-full overflow-hidden">
+        <div className="relative w-full overflow-x-hidden">
           <Image
             src={office.mobileBannerSrc}
             alt={office.bannerAlt}
@@ -60,7 +60,7 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
             className="h-auto w-full"
             sizes="100vw"
           />
-          <div className="absolute inset-x-0 top-0 z-20">
+          <div className="absolute inset-x-0 top-0 z-20 overflow-visible px-1 pt-2">
             <MobileHomeChrome />
           </div>
         </div>

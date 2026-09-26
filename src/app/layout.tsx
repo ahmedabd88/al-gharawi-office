@@ -44,8 +44,9 @@ const officeJsonLd = {
     addressRegion: "بغداد",
     addressCountry: "IQ",
   },
+  hasMap: contact.mapsUrl,
   areaServed: office.district,
-  sameAs: [contact.facebookUrl],
+  sameAs: [contact.facebookUrl, contact.mapsUrl],
 };
 
 export default function RootLayout({
