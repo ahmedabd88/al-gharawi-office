@@ -116,6 +116,8 @@ export function FollowUpRecreate({
       return;
     }
 
+    if (!normalizedWhatsapp) return;
+
     setErrors({});
     setLoading(true);
     setLookupError(null);
