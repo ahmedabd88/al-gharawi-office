@@ -15,10 +15,10 @@ export function MobileHomeChrome() {
   return (
     <div className="relative z-30 bg-transparent">
       <div
-        className="flex items-center justify-between gap-2 bg-gradient-to-b from-black/55 via-black/25 to-transparent px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]"
+        className="flex items-center justify-between gap-2 bg-gradient-to-b from-black/55 via-black/25 to-transparent px-3.5 pb-3 pt-3"
         dir="ltr"
       >
-        <div className="ms-0.5 flex size-[3.5rem] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#111] p-[3px] shadow-[0_0_14px_rgba(201,162,39,0.45)] ring-1 ring-gold/60">
+        <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#111] p-[3px] shadow-[0_0_14px_rgba(201,162,39,0.45)] ring-1 ring-gold/60">
           <Image
             src={office.parliamentSealSrc}
             alt="مجلس النواب العراقي"
