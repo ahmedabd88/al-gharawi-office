@@ -60,7 +60,7 @@ export function Hero({ site: _site }: { site: SiteContentSnapshot }) {
             className="h-auto w-full"
             sizes="100vw"
           />
-          <div className="absolute inset-x-0 top-0 z-20 overflow-visible">
+          <div className="absolute inset-x-0 top-0 z-20 overflow-visible px-1 pt-2">
             <MobileHomeChrome />
           </div>
         </div>
