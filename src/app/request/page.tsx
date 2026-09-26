@@ -20,7 +20,10 @@ export default async function RequestPage() {
       lead="تابع حالة طلبك بسهولة وبشكل مباشر — للطلبات المسجّلة لدى المكتب فقط."
       crumb={request.title}
     >
-      <FollowUpRecreate phoneDisplay={site.phoneDisplay} />
+      <FollowUpRecreate
+        phoneDisplay={site.phoneDisplay}
+        whatsappE164={site.whatsappE164}
+      />
     </RecreatePageShell>
   );
 }

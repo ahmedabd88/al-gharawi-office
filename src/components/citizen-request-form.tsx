@@ -1,16 +1,18 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { WhatsAppOpenLink } from "@/components/whatsapp-open-link";
 import { contact, request } from "@/lib/content";
 import {
   normalizeIraqiWhatsApp,
   normalizeWhitespace,
   validateFourPartArabicName,
 } from "@/lib/validation";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 type FieldErrors = {
   fullName?: string;
@@ -38,13 +40,23 @@ function formatDate(iso: string): string {
   }
 }
 
+function buildInquiryMessage(fullName: string, whatsapp: string): string {
+  return [
+    "السلام عليكم،",
+    "أود الاستفسار عن طلبي — بحثت في متابعة الموقع ولم يظهر طلب مسجّل.",
+    `الاسم الرباعي: ${fullName}`,
+    `رقم الواتساب: ${whatsapp}`,
+    "أرجو المراجعة أو تسجيل الطلب إن لزم. شكراً لكم.",
+  ].join("\n");
+}
+
 export function CitizenRequestForm({
   compact = false,
   phoneDisplay = contact.phoneDisplay,
+  whatsappE164 = contact.whatsappE164,
 }: {
   compact?: boolean;
   phoneDisplay?: string;
-  /** Kept for callers; unused — public flow no longer opens WhatsApp. */
   whatsappE164?: string;
 }) {
   const [status, setStatus] = useState<"idle" | "error" | "found" | "empty">("idle");
@@ -52,6 +64,17 @@ export function CitizenRequestForm({
   const [loading, setLoading] = useState(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [result, setResult] = useState<FollowUpResult | null>(null);
+  const [lastQuery, setLastQuery] = useState<{ fullName: string; whatsapp: string } | null>(
+    null
+  );
+
+  const inquiryWhatsAppUrl = useMemo(() => {
+    if (!lastQuery) return null;
+    return buildWhatsAppUrl(
+      whatsappE164,
+      buildInquiryMessage(lastQuery.fullName, lastQuery.whatsapp)
+    );
+  }, [lastQuery, whatsappE164]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,6 +99,7 @@ export function CitizenRequestForm({
       setStatus("error");
       setResult(null);
       setLookupError(null);
+      setLastQuery(null);
       return;
     }
 
@@ -83,6 +107,7 @@ export function CitizenRequestForm({
     setLookupError(null);
     setLoading(true);
     setResult(null);
+    setLastQuery({ fullName, whatsapp: normalizedWhatsapp });
 
     try {
       const res = await fetch("/api/citizen-requests", {
@@ -192,11 +217,18 @@ export function CitizenRequestForm({
 
       {status === "empty" ? (
         <div
-          className="rounded-md border border-amber-200 bg-amber-50 px-3 py-3 text-amber-950"
+          className="space-y-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-3 text-amber-950"
           role="status"
         >
           <p className="text-sm font-semibold leading-7">{request.empty}</p>
-          <p className="mt-1 text-sm leading-7 text-amber-900/80">{request.emptyHint}</p>
+          <p className="text-sm leading-7 text-amber-900/80">{request.emptyHint}</p>
+          {inquiryWhatsAppUrl ? (
+            <WhatsAppOpenLink
+              href={inquiryWhatsAppUrl}
+              label={request.emptyWhatsAppLabel}
+              hint={request.emptyWhatsAppHint}
+            />
+          ) : null}
         </div>
       ) : null}
 

@@ -4,12 +4,14 @@ import { FormEvent, useMemo, useState } from "react";
 import { CheckCircle2, Circle, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { request } from "@/lib/content";
+import { WhatsAppOpenLink } from "@/components/whatsapp-open-link";
+import { contact, request } from "@/lib/content";
 import {
   normalizeIraqiWhatsApp,
   normalizeWhitespace,
   validateFourPartArabicName,
 } from "@/lib/validation";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 type FieldErrors = { fullName?: string; whatsapp?: string };
@@ -51,17 +53,44 @@ function formatDate(iso: string): string {
   }
 }
 
-export function FollowUpRecreate({ phoneDisplay }: { phoneDisplay: string }) {
+function buildInquiryMessage(fullName: string, whatsapp: string): string {
+  return [
+    "السلام عليكم،",
+    "أود الاستفسار عن طلبي — بحثت في متابعة الموقع ولم يظهر طلب مسجّل.",
+    `الاسم الرباعي: ${fullName}`,
+    `رقم الواتساب: ${whatsapp}`,
+    "أرجو المراجعة أو تسجيل الطلب إن لزم. شكراً لكم.",
+  ].join("\n");
+}
+
+export function FollowUpRecreate({
+  phoneDisplay,
+  whatsappE164 = contact.whatsappE164,
+}: {
+  phoneDisplay: string;
+  whatsappE164?: string;
+}) {
   const [status, setStatus] = useState<"idle" | "error" | "found" | "empty">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [result, setResult] = useState<FollowUpResult | null>(null);
+  const [lastQuery, setLastQuery] = useState<{ fullName: string; whatsapp: string } | null>(
+    null
+  );
 
   const activeStep = useMemo(
     () => (result ? statusToStep(result.status) : 1),
     [result]
   );
+
+  const inquiryWhatsAppUrl = useMemo(() => {
+    if (!lastQuery) return null;
+    return buildWhatsAppUrl(
+      whatsappE164,
+      buildInquiryMessage(lastQuery.fullName, lastQuery.whatsapp)
+    );
+  }, [lastQuery, whatsappE164]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -83,12 +112,14 @@ export function FollowUpRecreate({ phoneDisplay }: { phoneDisplay: string }) {
       setStatus("error");
       setResult(null);
       setLookupError(null);
+      setLastQuery(null);
       return;
     }
 
     setErrors({});
     setLoading(true);
     setLookupError(null);
+    setLastQuery({ fullName, whatsapp: normalizedWhatsapp });
     try {
       const res = await fetch("/api/citizen-requests", {
         method: "POST",
@@ -175,10 +206,17 @@ export function FollowUpRecreate({ phoneDisplay }: { phoneDisplay: string }) {
 
         {lookupError ? <p className="mt-3 text-sm text-red-600">{lookupError}</p> : null}
         {status === "empty" ? (
-          <div className="mt-3 rounded-lg border border-dashed border-gold/40 bg-gold/5 p-3 text-sm">
+          <div className="mt-3 space-y-3 rounded-lg border border-dashed border-gold/40 bg-gold/5 p-3 text-sm">
             <p className="font-medium text-brand">{request.empty}</p>
-            <p className="mt-1 text-muted-foreground">{request.emptyHint}</p>
-            <p className="mt-2 text-xs text-muted-foreground" dir="ltr">
+            <p className="text-muted-foreground">{request.emptyHint}</p>
+            {inquiryWhatsAppUrl ? (
+              <WhatsAppOpenLink
+                href={inquiryWhatsAppUrl}
+                label={request.emptyWhatsAppLabel}
+                hint={request.emptyWhatsAppHint}
+              />
+            ) : null}
+            <p className="text-xs text-muted-foreground" dir="ltr">
               هاتف المكتب: {phoneDisplay}
             </p>
           </div>
