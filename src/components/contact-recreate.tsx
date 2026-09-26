@@ -138,17 +138,31 @@ export function ContactRecreate({ site }: { site: SiteContentSnapshot }) {
           <InfoRow
             icon={<MapPin className="size-4 text-gold" />}
             label={site.addressLabel}
-            value={site.address}
+            value={
+              <a
+                href={site.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gold hover:underline"
+              >
+                {site.address}
+              </a>
+            }
           />
         </div>
 
         <div className="mt-auto border-t border-white/10 p-4 sm:p-5">
-          <p className="mb-2 text-xs text-gold">موقع المكتب على الخريطة</p>
-          <div className="flex min-h-28 items-center justify-center rounded-xl bg-white/95 px-3 text-center text-xs leading-6 text-brand">
-            خريطة المكتب — {site.address}
-            <br />
-            (يُحدَّث رابط الخريطة لاحقاً)
-          </div>
+          <p className="mb-2 text-xs text-gold">{site.mapsHint}</p>
+          <a
+            href={site.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl border border-gold/40 bg-white/95 px-4 py-5 text-center transition-colors hover:border-gold hover:bg-gold/10"
+          >
+            <MapPin className="size-7 text-gold" aria-hidden />
+            <span className="text-sm font-bold text-brand">{site.mapsLabel}</span>
+            <span className="text-xs leading-6 text-brand/70">{site.address}</span>
+          </a>
         </div>
       </aside>
     </div>

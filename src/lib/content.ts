@@ -205,6 +205,9 @@ export const contact = {
   /** العنوان الفعلي للمكتب (ليس الدائرة الانتخابية) */
   address: "بغداد، المحمودية، حي البتول",
   addressLabel: "عنوان المكتب",
+  mapsUrl: "https://maps.app.goo.gl/3LDaD8PGAYgF8VZj7?g_st=ic",
+  mapsLabel: "افتح موقع المكتب على الخريطة",
+  mapsHint: "موقع المكتب على الخريطة",
   placeholders: {
     email: "البريد الإلكتروني — يُحدَّث لاحقاً",
   },
