@@ -34,8 +34,7 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
         <HeroPillNav />
       </div>
 
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 md:hidden">
-        <p className="font-heading text-sm font-semibold text-gold">مكتب النائب</p>
+      <div className="mx-auto flex max-w-6xl items-center justify-start gap-4 px-4 py-3 sm:px-6 md:hidden" dir="ltr">
         <Button
           type="button"
           variant="outline"
