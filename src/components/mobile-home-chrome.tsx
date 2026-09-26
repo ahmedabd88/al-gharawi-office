@@ -41,13 +41,17 @@ export function MobileHomeChrome() {
 
         <button
           type="button"
-          className="inline-flex size-11 items-center justify-center rounded-lg text-gold transition-colors hover:bg-white/10"
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl border-2 border-gold bg-black/80 text-gold shadow-[0_0_16px_rgba(201,162,39,0.45)] transition-colors hover:bg-gold hover:text-[#1a1205]"
           aria-expanded={open}
           aria-controls="mobile-home-menu"
           aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X className="size-7" strokeWidth={2.25} /> : <Menu className="size-7" strokeWidth={2.25} />}
+          {open ? (
+            <X className="size-7" strokeWidth={2.5} aria-hidden />
+          ) : (
+            <Menu className="size-7" strokeWidth={2.5} aria-hidden />
+          )}
         </button>
       </div>
 
