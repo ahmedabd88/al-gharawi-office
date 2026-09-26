@@ -4,7 +4,6 @@ import { Hero } from "@/components/hero";
 import { RequestPreview } from "@/components/request-preview";
 import { Services } from "@/components/services";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import { getSiteContentSnapshot } from "@/lib/site-content-store";
 
 /** Cache homepage RSC so returning to `/` is soft-nav fast; office panel revalidates on save. */
@@ -15,7 +14,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <SiteHeader />
+      {/* Nav lives inside Hero only — no SiteHeader (was duplicating the pill bar). */}
       <main className="flex-1">
         <Hero site={site} />
         <About site={site} />

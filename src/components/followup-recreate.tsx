@@ -157,22 +157,22 @@ export function FollowUpRecreate({
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
+    <div className="grid gap-3 lg:grid-cols-2 lg:gap-5">
       <form
         onSubmit={onSubmit}
-        className="rounded-2xl bg-white p-5 shadow-sm sm:p-6"
+        className="rounded-2xl bg-white p-3.5 shadow-sm sm:p-6"
       >
-        <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-gold text-[#1a1205]">
-          <Search className="size-5" aria-hidden />
+        <div className="mx-auto mb-2 flex size-10 items-center justify-center rounded-full bg-gold text-[#1a1205] sm:mb-3 sm:size-12">
+          <Search className="size-4 sm:size-5" aria-hidden />
         </div>
-        <h2 className="font-heading text-center text-lg font-bold text-brand sm:text-xl">
+        <h2 className="font-heading text-center text-base font-bold text-brand sm:text-xl">
           ابحث عن طلبك
         </h2>
-        <p className="mt-1.5 text-center text-sm leading-6 text-muted-foreground">
+        <p className="mt-1 text-center text-xs leading-5 text-muted-foreground sm:text-sm sm:leading-6">
           أدخل الاسم الرباعي ورقم الواتساب المسجّلين لدى المكتب لمتابعة الحالة. لا يُنشأ طلب جديد من الموقع.
         </p>
 
-        <div className="mt-4 space-y-3">
+        <div className="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
           <div>
             <Label htmlFor="fu-name">{request.fullNameLabel}</Label>
             <Input

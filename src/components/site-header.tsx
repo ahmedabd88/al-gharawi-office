@@ -15,7 +15,8 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  if (variant === "hidden" || pathname === "/") {
+  // Homepage uses the pill nav inside Hero — never render a second top bar.
+  if (variant === "hidden" || !pathname || pathname === "/") {
     return null;
   }
 

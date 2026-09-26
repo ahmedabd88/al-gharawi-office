@@ -21,7 +21,7 @@ export function RecreatePageShell({
         <BrandPageChrome />
         <PageHeroBanner title={title} lead={lead} crumb={crumb} />
       </div>
-      <main className="relative z-[1] mx-auto w-full max-w-6xl flex-1 px-3 pb-8 pt-2 sm:px-5 sm:pb-10 sm:pt-3 lg:px-6">
+      <main className="relative z-[1] mx-auto w-full max-w-6xl flex-1 px-3 pb-6 pt-1.5 sm:px-5 sm:pb-8 sm:pt-2 lg:px-6">
         {children}
       </main>
       <BrandPageFooter />
