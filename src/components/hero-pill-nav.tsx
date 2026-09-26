@@ -66,8 +66,8 @@ export function HeroPillNav({ floating = false }: { floating?: boolean }) {
           })}
         </nav>
 
-        <div className="flex w-full items-center justify-between gap-3 md:hidden">
-          <p className="font-heading text-sm font-semibold text-gold drop-shadow">مكتب النائب</p>
+        {/* Mobile: menu only — no brand text (artwork already carries branding) */}
+        <div className="flex w-full items-center justify-start md:hidden" dir="ltr">
           <Button
             type="button"
             variant="outline"
