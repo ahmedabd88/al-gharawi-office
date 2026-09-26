@@ -18,13 +18,13 @@ export function MobileHomeChrome() {
         className="flex items-center justify-between gap-2 bg-gradient-to-b from-black/55 via-black/25 to-transparent px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]"
         dir="ltr"
       >
-        <div className="flex size-14 shrink-0 items-center justify-center overflow-visible rounded-full bg-black/35 p-0.5 shadow-[0_0_12px_rgba(201,162,39,0.4)] ring-1 ring-gold/50">
+        <div className="ms-0.5 flex size-[3.5rem] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#111] p-[3px] shadow-[0_0_14px_rgba(201,162,39,0.45)] ring-1 ring-gold/60">
           <Image
             src={office.parliamentSealSrc}
             alt="مجلس النواب العراقي"
             width={112}
             height={112}
-            className="size-full rounded-full object-cover object-center"
+            className="size-full rounded-full object-contain"
             sizes="56px"
             priority
           />
