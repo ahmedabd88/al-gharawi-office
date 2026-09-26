@@ -15,14 +15,14 @@ export const office = {
   electionListNote: "ورد اسمه ضمن قائمة الكتلة الصدرية في نتائج انتخابات 2021",
   committeeNote:
     "ورد اسمه ضمن أعضاء اللجنة القانونية النيابية في بيان رسمي بتاريخ 30 آذار 2022",
-  bannerSrc: "/images/hero-final-baghdad.png",
-  mobileBannerSrc: "/images/hero-final-mobile.png",
+  bannerSrc: "/images/hero-final-baghdad.webp",
+  mobileBannerSrc: "/images/hero-final-mobile.webp",
   parliamentSealSrc: "/images/parliament-seal.png",
   bannerAlt: "بانر مكتب النائب سالم سوادي الغراوي — بغداد، العلم، الشعار، والصورة الرسمية، وخط التيار الوطني الشيعي",
   slogan: "خدمة المواطن .. مسؤوليتنا",
   currentName: "التيار الوطني الشعبي",
-  fistLogoSrc: "/images/current-fist-logo.png",
-  pageHeroSrc: "/images/page-hero-inner.png",
+  fistLogoSrc: "/images/current-fist-logo.webp",
+  pageHeroSrc: "/images/page-hero-inner.webp",
 } as const;
 
 /** Mobile homepage quick links (2×2), matching the final mobile reference. */

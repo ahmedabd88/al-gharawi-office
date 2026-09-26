@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { office } from "@/lib/content";
 
 /**
  * Inner-page hero: full-bleed artwork (skyline + fist + calligraphy), then a
@@ -18,12 +19,12 @@ export function PageHeroBanner({
     <section className="relative isolate overflow-hidden bg-[#0a0a0a] text-white">
       <div className="relative">
         <Image
-          src="/images/page-hero-inner.png"
+          src={office.pageHeroSrc}
           alt=""
-          width={1983}
-          height={793}
+          width={1920}
+          height={768}
           priority
-          unoptimized
+          quality={80}
           className="h-auto w-full"
           sizes="100vw"
         />
@@ -37,7 +38,7 @@ export function PageHeroBanner({
       <div className="border-t border-gold/30 bg-[#111111]">
         <div className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
           <p className="text-xs font-medium text-[#f0d78c] sm:text-sm">
-            <Link href="/" className="hover:underline">
+            <Link href="/" prefetch className="hover:underline">
               الصفحة الرئيسية
             </Link>
             <span className="mx-1.5 text-[#f0d78c]/50">/</span>

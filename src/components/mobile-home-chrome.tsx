@@ -70,6 +70,7 @@ export function MobileHomeChrome() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch
                 onClick={() => setOpen(false)}
                 className={cn(
                   "inline-flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium",

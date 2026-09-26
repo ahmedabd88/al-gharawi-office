@@ -7,7 +7,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSiteContentSnapshot } from "@/lib/site-content-store";
 
-export const dynamic = "force-dynamic";
+/** Cache homepage RSC so returning to `/` is soft-nav fast; office panel revalidates on save. */
+export const revalidate = 60;
 
 export default async function HomePage() {
   const site = await getSiteContentSnapshot();

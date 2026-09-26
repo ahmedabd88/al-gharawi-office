@@ -1,5 +1,6 @@
 import { Cairo, El_Messiri } from "next/font/google";
 import type { Metadata } from "next";
+import { PrefetchNavRoutes } from "@/components/prefetch-nav-routes";
 import { contact, office } from "@/lib/content";
 import "./globals.css";
 
@@ -7,12 +8,14 @@ const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
   display: "swap",
+  weight: ["400", "600", "700"],
 });
 
 const elMessiri = El_Messiri({
   subsets: ["arabic", "latin"],
   variable: "--font-el-messiri",
   display: "swap",
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -65,6 +68,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(officeJsonLd) }}
         />
+        <PrefetchNavRoutes />
         {children}
       </body>
     </html>

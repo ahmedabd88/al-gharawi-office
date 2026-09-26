@@ -65,6 +65,7 @@ export function SiteHeader({ variant = "overlay" }: { variant?: "overlay" | "sol
             <Link
               key={item.href}
               href={item.href}
+              prefetch
               className="rounded-lg px-3 py-2.5 text-sm font-medium text-white hover:bg-white/10"
               onClick={() => setOpen(false)}
             >

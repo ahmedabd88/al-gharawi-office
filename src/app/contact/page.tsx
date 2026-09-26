@@ -4,7 +4,7 @@ import { RecreatePageShell } from "@/components/recreate-page-shell";
 import { contact, office } from "@/lib/content";
 import { getSiteContentSnapshot } from "@/lib/site-content-store";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: `تواصل | ${office.brand}`,

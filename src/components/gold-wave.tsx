@@ -28,13 +28,13 @@ export function BrandPageFooter() {
   return (
     <footer className="relative mt-auto overflow-hidden bg-[#0a0a0a] text-white">
       <div
-        className="pointer-events-none absolute inset-0 bg-[url('/images/page-hero-inner.png')] bg-cover bg-center opacity-25"
+        className="pointer-events-none absolute inset-0 bg-[url('/images/page-hero-inner.webp')] bg-cover bg-center opacity-25"
         aria-hidden
       />
       <div className="relative z-[1] mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-8 text-center sm:py-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/current-fist-logo.png"
+          src="/images/current-fist-logo.webp"
           alt=""
           width={56}
           height={56}

@@ -27,6 +27,7 @@ export function MobileQuickCards() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch
               className="group relative flex min-h-[7.5rem] flex-col justify-between overflow-hidden rounded-xl border border-gold/55 bg-[#0c0c0c] p-3.5 shadow-[inset_0_0_24px_rgba(201,162,39,0.06)] transition-colors hover:border-gold hover:bg-[#12100a]"
             >
               <div className="flex items-start justify-between gap-2">
