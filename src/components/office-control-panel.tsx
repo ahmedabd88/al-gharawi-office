@@ -16,6 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  OfficeCitizenRequestsTable,
+  type OfficeCitizenRequestRow,
+} from "@/components/office-citizen-requests-table";
 import { OfficeTransactionsPanel } from "@/components/office-transactions-panel";
 import { OfficeRegisterRequestForm } from "@/components/office-register-request-form";
 import {
@@ -39,14 +43,6 @@ const sections: { id: Section; label: string; icon: typeof FileText }[] = [
   { id: "notes", label: "ملاحظات النشر", icon: ShieldCheck },
 ];
 
-type ApiItem = {
-  id?: string;
-  fullName: string;
-  whatsapp: string;
-  subject?: string | null;
-  at: string;
-};
-
 function parseSection(raw: string | null): Section {
   if (raw === "requests" || raw === "notes" || raw === "content") return raw;
   return "content";
@@ -64,6 +60,7 @@ export function OfficeControlPanel() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
 
+  const [citizenRows, setCitizenRows] = useState<OfficeCitizenRequestRow[]>([]);
   const [citizenTx, setCitizenTx] = useState<OfficeTransaction[]>([]);
   const [txTab, setTxTab] = useState<TransactionTab>("transactions");
   const [requestsLoading, setRequestsLoading] = useState(false);
@@ -115,13 +112,32 @@ export function OfficeControlPanel() {
         router.replace("/office-login?next=/office?section=requests");
         return;
       }
-      const data = (await res.json()) as { ok?: boolean; items?: ApiItem[]; error?: string };
+      const data = (await res.json()) as {
+        ok?: boolean;
+        items?: OfficeCitizenRequestRow[];
+        error?: string;
+      };
       if (!res.ok || !data.ok) {
         setRequestsError(data.error || "تعذر تحميل الطلبات");
+        setCitizenRows([]);
         setCitizenTx([]);
         return;
       }
-      setCitizenTx((data.items ?? []).map((row, index) => citizenToTransaction(row, index)));
+      const items = data.items ?? [];
+      // Newest first for the applicants table
+      const newestFirst = [...items].reverse();
+      setCitizenRows(newestFirst);
+      setCitizenTx(
+        items.map((row, index) =>
+          citizenToTransaction(
+            {
+              ...row,
+              status: row.status ?? undefined,
+            },
+            index
+          )
+        )
+      );
     } catch {
       setRequestsError("تعذر الاتصال بالخادم");
     } finally {
@@ -131,7 +147,8 @@ export function OfficeControlPanel() {
 
   useEffect(() => {
     void loadContent();
-  }, [loadContent]);
+    void loadRequests();
+  }, [loadContent, loadRequests]);
 
   useEffect(() => {
     if (section === "requests") void loadRequests();
@@ -254,19 +271,36 @@ export function OfficeControlPanel() {
           {sections.map((item) => {
             const active = section === item.id;
             const Icon = item.icon;
+            const count =
+              item.id === "requests" && citizenRows.length > 0 ? citizenRows.length : null;
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => setSection(item.id)}
                 className={cn(
-                  "inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-5",
-                  active ? "bg-[#111] text-white" : "text-[#444] hover:bg-[#f0ece3]"
+                  "inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-bold transition-colors sm:flex-none sm:min-w-[8.5rem] sm:px-5",
+                  active
+                    ? item.id === "requests"
+                      ? "bg-gold text-[#1a1205] shadow-sm"
+                      : "bg-[#111] text-white"
+                    : "text-[#444] hover:bg-[#f0ece3]",
+                  item.id === "requests" && !active && "ring-1 ring-gold/35"
                 )}
                 aria-current={active ? "page" : undefined}
               >
                 <Icon className="size-4" aria-hidden />
                 {item.label}
+                {count !== null ? (
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-0.5 text-xs font-bold",
+                      active ? "bg-[#1a1205]/15" : "bg-gold/20 text-[#1a1205]"
+                    )}
+                  >
+                    {count}
+                  </span>
+                ) : null}
               </button>
             );
           })}
@@ -302,6 +336,18 @@ export function OfficeControlPanel() {
                 {saveMessage}
               </p>
             ) : null}
+
+            <p className="mb-5 rounded-lg border border-gold/35 bg-gold/10 px-3 py-2.5 text-sm leading-6 text-[#1a1205]">
+              لتسجيل طلبات المواطنين ورؤية{" "}
+              <button
+                type="button"
+                className="font-bold text-[#111] underline underline-offset-2"
+                onClick={() => setSection("requests")}
+              >
+                جدول مقدّمي الطلبات
+              </button>{" "}
+              افتح تبويب <strong>الطلبات</strong> أعلاه (داخل هذه اللوحة فقط — ليس للموقع العام).
+            </p>
 
             <form onSubmit={(e) => void onSave(e)} className="space-y-5">
               {field("heroSupport", { multiline: true })}
@@ -345,37 +391,54 @@ export function OfficeControlPanel() {
 
         {section === "requests" ? (
           <section className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#222]/10 bg-white px-4 py-3 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border-2 border-gold/35 bg-white px-4 py-4 shadow-sm">
               <div>
-                <h2 className="font-heading text-xl font-bold">الطلبات والمعاملات</h2>
-                <p className="mt-1 text-sm text-[#666]">
-                  سجّل الطلبات هنا فقط — الموقع العام يعرض المتابعة دون إنشاء طلب جديد.
+                <h2 className="font-heading text-xl font-bold sm:text-2xl">الطلبات — مقدّمو الطلبات</h2>
+                <p className="mt-1 text-sm leading-6 text-[#555]">
+                  هذا الجدول داخل لوحة المكتب فقط. سجّل الطلب أدناه ثم راقب الاسم والواتساب والحالة هنا.
+                  المواطن يتابع من صفحة «متابعة الطلب» في الموقع العام.
                 </p>
               </div>
               <Button
                 type="button"
                 variant="outline"
-                className="h-11 rounded-md"
+                className="h-11 rounded-md border-gold/40"
                 onClick={() => void loadRequests()}
                 disabled={requestsLoading}
               >
                 <RefreshCw className="size-4" aria-hidden />
-                تحديث
+                تحديث الجدول
               </Button>
             </div>
 
             <OfficeRegisterRequestForm
-              onRegistered={() => loadRequests()}
+              onRegistered={() => void loadRequests()}
               onUnauthorized={() => router.replace("/office-login?next=/office?section=requests")}
             />
 
-            {requestsLoading ? <p className="text-sm text-[#555]">جاري تحميل الطلبات…</p> : null}
             {requestsError ? (
-              <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+              <p
+                className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                role="alert"
+              >
                 {requestsError}
               </p>
             ) : null}
-            <OfficeTransactionsPanel citizenTx={citizenTx} activeTab={txTab} onTabChange={setTxTab} />
+
+            <OfficeCitizenRequestsTable rows={citizenRows} loading={requestsLoading} />
+
+            <details className="rounded-xl border border-[#222]/10 bg-white open:shadow-sm">
+              <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-[#444]">
+                معاملات المكتب الإضافية (اختياري — كتب صادرة/واردة)
+              </summary>
+              <div className="border-t border-[#222]/10 p-3 sm:p-4">
+                <OfficeTransactionsPanel
+                  citizenTx={citizenTx}
+                  activeTab={txTab}
+                  onTabChange={setTxTab}
+                />
+              </div>
+            </details>
           </section>
         ) : null}
 
