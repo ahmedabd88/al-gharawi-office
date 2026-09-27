@@ -219,7 +219,7 @@ export function FollowUpRecreate({
               />
             ) : null}
             <p className="text-xs text-muted-foreground" dir="ltr">
-              هاتف المكتب: {phoneDisplay}
+              رقم المكتب: {phoneDisplay}
             </p>
           </div>
         ) : null}

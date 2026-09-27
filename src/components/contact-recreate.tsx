@@ -113,13 +113,28 @@ export function ContactRecreate({ site }: { site: SiteContentSnapshot }) {
         <div className="space-y-4 p-4 sm:p-5">
           <InfoRow
             icon={<Phone className="size-4 text-[#25D366]" />}
-            label="الهاتف / واتساب"
+            label={`${site.officePhoneLabel} / واتساب`}
             value={
               <a href={`tel:${site.phoneTel}`} className="unicode-isolate hover:text-gold" dir="ltr">
                 {site.phoneDisplay}
               </a>
             }
           />
+          {site.deputyPhoneDisplay && site.deputyPhoneTel ? (
+            <InfoRow
+              icon={<Phone className="size-4 text-gold" />}
+              label={site.deputyPhoneLabel}
+              value={
+                <a
+                  href={`tel:${site.deputyPhoneTel}`}
+                  className="unicode-isolate hover:text-gold"
+                  dir="ltr"
+                >
+                  {site.deputyPhoneDisplay}
+                </a>
+              }
+            />
+          ) : null}
           <InfoRow icon={<Clock3 className="size-4 text-gold" />} label="أوقات الاستقبال" value={site.hours} />
           <InfoRow
             icon={<Share2 className="size-4 text-[#1877F2]" />}

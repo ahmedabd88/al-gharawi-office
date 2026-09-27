@@ -195,10 +195,13 @@ export const request = {
 export const contact = {
   title: "تواصل معنا",
   lead: "تواصل هاتفياً أو عبر واتساب أو فيسبوك، أو زر المكتب في بغداد، المحمودية، حي البتول.",
+  /** رقم مكتب النائب — الافتراضي الحالي في الموقع */
   phoneDisplay: "07762084894",
   phoneTel: "+9647762084894",
   phoneRaw: "07762084894",
   whatsappE164: "9647762084894",
+  officePhoneLabel: "رقم المكتب",
+  deputyPhoneLabel: "رقم النائب",
   hours: "كل يوم جمعة الساعة 8 مساءً",
   facebookUrl: "https://www.facebook.com/profile.php?id=100050600824425",
   facebookLabel: "صفحة فيسبوك",

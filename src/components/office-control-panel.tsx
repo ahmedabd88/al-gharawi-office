@@ -308,6 +308,13 @@ export function OfficeControlPanel() {
               {field("heroPrimaryCta")}
               {field("contactLead", { multiline: true })}
               {field("phoneDisplay", { dir: "ltr" })}
+              <div className="space-y-1">
+                {field("deputyPhoneDisplay", { dir: "ltr" })}
+                <p className="text-xs leading-5 text-[#777]">
+                  يظهر للزوار فقط إذا وضعت رقماً. اتركه فارغاً الآن إن لم يكن جاهزاً. واتساب الموقع يبقى على رقم
+                  المكتب.
+                </p>
+              </div>
               {field("hours")}
               {field("address")}
               {field("facebookUrl", { dir: "ltr" })}

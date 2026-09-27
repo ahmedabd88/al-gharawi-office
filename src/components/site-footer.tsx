@@ -36,10 +36,30 @@ export function SiteFooter({ site }: { site: SiteContentSnapshot }) {
               href={`tel:${site.phoneTel}`}
               className="inline-flex items-center gap-3 rounded-xl border border-white/20 px-5 py-4 text-lg font-semibold transition-colors hover:border-gold hover:text-gold"
               dir="ltr"
+              aria-label={`${site.officePhoneLabel}: ${site.phoneDisplay}`}
             >
               <Phone className="size-5" aria-hidden />
-              <span className="unicode-isolate tabular-nums tracking-wide">{site.phoneDisplay}</span>
+              <span className="flex flex-col items-start gap-0.5 text-start">
+                <span className="text-xs font-medium text-gold">{site.officePhoneLabel}</span>
+                <span className="unicode-isolate tabular-nums tracking-wide">{site.phoneDisplay}</span>
+              </span>
             </a>
+            {site.deputyPhoneDisplay && site.deputyPhoneTel ? (
+              <a
+                href={`tel:${site.deputyPhoneTel}`}
+                className="inline-flex items-center gap-3 rounded-xl border border-white/20 px-5 py-4 text-lg font-semibold transition-colors hover:border-gold hover:text-gold"
+                dir="ltr"
+                aria-label={`${site.deputyPhoneLabel}: ${site.deputyPhoneDisplay}`}
+              >
+                <Phone className="size-5" aria-hidden />
+                <span className="flex flex-col items-start gap-0.5 text-start">
+                  <span className="text-xs font-medium text-gold">{site.deputyPhoneLabel}</span>
+                  <span className="unicode-isolate tabular-nums tracking-wide">
+                    {site.deputyPhoneDisplay}
+                  </span>
+                </span>
+              </a>
+            ) : null}
             <Link
               href="/request"
               className="inline-flex items-center gap-3 rounded-xl border border-gold/50 bg-gold/10 px-5 py-4 text-lg font-semibold text-gold transition-colors hover:bg-gold hover:text-[#1a1205]"

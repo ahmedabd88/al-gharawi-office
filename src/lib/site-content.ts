@@ -9,7 +9,10 @@ export type EditableSiteContent = {
   heroSupport: string;
   heroPrimaryCta: string;
   contactLead: string;
+  /** رقم مكتب النائب — يظهر دائماً ويُستخدم لواتساب الموقع */
   phoneDisplay: string;
+  /** رقم النائب الشخصي — اختياري؛ يظهر للعامة فقط إن وُضع */
+  deputyPhoneDisplay: string;
   hours: string;
   address: string;
   facebookUrl: string;
@@ -22,10 +25,14 @@ export type SiteContentSnapshot = EditableSiteContent & {
   phoneTel: string;
   phoneRaw: string;
   whatsappE164: string;
+  /** مشتق من deputyPhoneDisplay؛ فارغ إذا لم يُضبط رقم شخصي */
+  deputyPhoneTel: string;
   addressLabel: string;
   mapsUrl: string;
   mapsLabel: string;
   mapsHint: string;
+  officePhoneLabel: string;
+  deputyPhoneLabel: string;
 };
 
 export const editableSiteDefaults: EditableSiteContent = {
@@ -33,6 +40,7 @@ export const editableSiteDefaults: EditableSiteContent = {
   heroPrimaryCta: hero.primaryCta,
   contactLead: contact.lead,
   phoneDisplay: contact.phoneDisplay,
+  deputyPhoneDisplay: "",
   hours: contact.hours,
   address: contact.address,
   facebookUrl: contact.facebookUrl,
@@ -43,14 +51,15 @@ export const siteContentFieldLabels: Record<keyof EditableSiteContent, string> =
   heroSupport: "نص الترحيب تحت اسم المكتب (الرئيسية)",
   heroPrimaryCta: "نص زر متابعة الطلب",
   contactLead: "مقدمة صفحة التواصل",
-  phoneDisplay: "رقم الهاتف / واتساب (مثل 07762084894)",
+  phoneDisplay: "رقم المكتب / واتساب (مثل 07762084894)",
+  deputyPhoneDisplay: "رقم النائب الشخصي (اختياري — فارغ الآن)",
   hours: "أوقات الاستقبال",
   address: "عنوان المكتب",
   facebookUrl: "رابط فيسبوك",
   publishNote: "ملاحظات داخلية (لا تظهر للزوار)",
 };
 
-/** Normalize Iraqi display number → tel / E.164 / raw. */
+/** Normalize Iraqi display number → tel / E.164 / raw. Falls back to office default if empty. */
 export function derivePhoneFields(phoneDisplay: string): {
   phoneDisplay: string;
   phoneRaw: string;
@@ -77,6 +86,35 @@ export function derivePhoneFields(phoneDisplay: string): {
   };
 }
 
+/** Optional personal number — empty string means hidden on the public site. */
+export function deriveOptionalPhoneFields(input: string): {
+  deputyPhoneDisplay: string;
+  deputyPhoneTel: string;
+} {
+  const digits = input.replace(/\D/g, "");
+  if (!digits) {
+    return { deputyPhoneDisplay: "", deputyPhoneTel: "" };
+  }
+  let local = digits;
+  if (digits.startsWith("964") && digits.length >= 12) {
+    local = `0${digits.slice(3)}`;
+  } else if (digits.startsWith("0") && digits.length >= 10) {
+    local = digits;
+  } else if (digits.length === 10) {
+    local = `0${digits}`;
+  } else {
+    return { deputyPhoneDisplay: "", deputyPhoneTel: "" };
+  }
+  const national = local.startsWith("0") ? local.slice(1) : local;
+  if (national.length < 9) {
+    return { deputyPhoneDisplay: "", deputyPhoneTel: "" };
+  }
+  return {
+    deputyPhoneDisplay: local,
+    deputyPhoneTel: `+964${national}`,
+  };
+}
+
 export function mergeEditableContent(
   overrides: Partial<EditableSiteContent> | null | undefined
 ): EditableSiteContent {
@@ -93,13 +131,18 @@ export function toSiteContentSnapshot(
   updatedAt: string | null
 ): SiteContentSnapshot {
   const phones = derivePhoneFields(editable.phoneDisplay);
+  const deputy = deriveOptionalPhoneFields(editable.deputyPhoneDisplay);
   return {
     ...editable,
     ...phones,
+    deputyPhoneDisplay: deputy.deputyPhoneDisplay,
+    deputyPhoneTel: deputy.deputyPhoneTel,
     addressLabel: contact.addressLabel,
     mapsUrl: contact.mapsUrl,
     mapsLabel: contact.mapsLabel,
     mapsHint: contact.mapsHint,
+    officePhoneLabel: contact.officePhoneLabel,
+    deputyPhoneLabel: contact.deputyPhoneLabel,
     updatedAt,
   };
 }
