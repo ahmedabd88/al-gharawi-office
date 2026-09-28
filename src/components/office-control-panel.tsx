@@ -425,7 +425,14 @@ export function OfficeControlPanel() {
               </p>
             ) : null}
 
-            <OfficeCitizenRequestsTable rows={citizenRows} loading={requestsLoading} />
+            <OfficeCitizenRequestsTable
+              rows={citizenRows}
+              loading={requestsLoading}
+              onChanged={() => void loadRequests()}
+              onUnauthorized={() =>
+                router.replace("/office-login?next=/office?section=requests")
+              }
+            />
 
             <details className="rounded-xl border border-[#222]/10 bg-white open:shadow-sm">
               <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-[#444]">

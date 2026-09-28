@@ -163,6 +163,59 @@ export async function appendOfficeRequest(
   return entry;
 }
 
+export async function updateOfficeRequest(
+  id: string,
+  patch: {
+    fullName: string;
+    whatsapp: string;
+    subject?: string | null;
+    status?: CitizenRequestStatus;
+    ref?: string | null;
+  }
+): Promise<StoredCitizenRequest | null> {
+  const current = (await readFromDisk()) ?? memoryStore();
+  const items = current.items.map(normalizeStoredItem);
+  const index = items.findIndex((row) => row.id === id);
+  if (index < 0) return null;
+
+  const prev = items[index]!;
+  const updated: StoredCitizenRequest = {
+    ...prev,
+    fullName: normalizeWhitespace(patch.fullName),
+    whatsapp: normalizeIraqiWhatsApp(patch.whatsapp) ?? patch.whatsapp,
+    subject: patch.subject ?? null,
+    status: patch.status ?? prev.status,
+    ref: patch.ref?.trim() || null,
+  };
+  const nextItems = [...items];
+  nextItems[index] = updated;
+  const next: StoreFile = {
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    items: nextItems,
+  };
+  memoryStore().items = next.items;
+  memoryStore().updatedAt = next.updatedAt;
+  await writeToDisk(next);
+  return updated;
+}
+
+export async function deleteOfficeRequest(id: string): Promise<boolean> {
+  const current = (await readFromDisk()) ?? memoryStore();
+  const items = current.items.map(normalizeStoredItem);
+  const nextItems = items.filter((row) => row.id !== id);
+  if (nextItems.length === items.length) return false;
+  const next: StoreFile = {
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    items: nextItems,
+  };
+  memoryStore().items = next.items;
+  memoryStore().updatedAt = next.updatedAt;
+  await writeToDisk(next);
+  return true;
+}
+
 export async function clearOfficeRequests(): Promise<void> {
   const next: StoreFile = { version: 1, updatedAt: new Date().toISOString(), items: [] };
   memoryStore().items = [];
